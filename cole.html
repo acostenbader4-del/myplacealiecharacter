@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>cole_avery // myPlace</title>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Lora:ital,wght@0,400;0,500;1,400;1,500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0905;
+    --bg2: #110f08;
+    --bg3: #18150c;
+    --border: #2e2818;
+    --border2: #3e3820;
+    --accent: #8a6a30;
+    --accent2: #c49a48;
+    --accent3: #6a8a4a;
+    --text: #c8bc98;
+    --text-dim: #5a5238;
+    --text-bright: #e8ddb8;
+    --red: #8a3a28;
+    --red2: #b85a3a;
+    --sky: #4a6a8a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', serif;
+    font-weight: 400;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 60% 10%, rgba(138,106,48,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 10% 80%, rgba(106,138,74,0.04) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='6' height='6' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(200,188,152,0.018)'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    background-size: auto, auto, 6px 6px, auto;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 2px solid var(--border2);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+  .topbar-logo {
+    font-family: 'Alfa Slab One', serif;
+    font-size: 20px;
+    color: var(--accent2);
+    text-decoration: none;
+    letter-spacing: 2px;
+  }
+  .topbar-logo span { color: var(--text-dim); }
+  .topbar-nav { display: flex; gap: 20px; align-items: center; }
+  .topbar-nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-family: 'Share Tech Mono', monospace;
+    transition: color 0.2s;
+  }
+  .topbar-nav a:hover { color: var(--text-bright); }
+  .hub-link {
+    background: var(--accent);
+    color: var(--bg) !important;
+    padding: 5px 12px;
+    font-size: 11px !important;
+  }
+
+  /* BANNER */
+  .banner-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 6px 40px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .banner-bar span { color: var(--accent2); }
+
+  /* PROFILE HEADER */
+  .profile-header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 30px 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--red), var(--accent2), var(--accent3), var(--accent2), var(--red));
+    opacity: 0.7;
+  }
+  .header-wood {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      92deg,
+      transparent 0px, transparent 80px,
+      rgba(138,106,48,0.015) 80px, rgba(138,106,48,0.015) 82px
+    );
+    pointer-events: none;
+  }
+  .header-bg-text {
+    position: absolute;
+    bottom: -18px; right: -8px;
+    font-family: 'Alfa Slab One', serif;
+    font-size: 140px;
+    color: rgba(138,106,48,0.045);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -4px;
+  }
+
+  .profile-main-row {
+    display: flex;
+    gap: 26px;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar-wrap { position: relative; flex-shrink: 0; }
+  .profile-avatar {
+    width: 120px; height: 120px;
+    object-fit: cover;
+    display: block;
+    border: 2px solid var(--border2);
+    filter: contrast(1.08) saturate(0.7) brightness(0.88);
+    transition: filter 0.3s;
+  }
+  .profile-avatar:hover { filter: contrast(1) saturate(0.9) brightness(1); }
+  .avatar-badge {
+    position: absolute;
+    bottom: -10px; right: -10px;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'Alfa Slab One', serif;
+    font-size: 12px;
+    padding: 2px 8px;
+    transform: rotate(2deg);
+    letter-spacing: 1px;
+  }
+
+  .profile-identity { flex: 1; padding-bottom: 18px; }
+  .id-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .profile-display-name {
+    font-family: 'Alfa Slab One', serif;
+    font-size: 36px;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .profile-handle {
+    color: var(--accent2);
+    font-size: 13px;
+    margin-top: 5px;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .profile-tagline {
+    font-family: 'Lora', serif;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    font-style: italic;
+    max-width: 450px;
+    line-height: 1.6;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 0;
+    margin-top: 16px;
+    border: 1px solid var(--border2);
+    width: fit-content;
+  }
+  .stat-item {
+    padding: 8px 20px;
+    border-right: 1px solid var(--border2);
+    text-align: center;
+    background: var(--bg3);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Alfa Slab One', serif;
+    font-size: 17px;
+    color: var(--accent2);
+    display: block;
+    letter-spacing: 1px;
+  }
+  .stat-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .profile-online {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--text-dim); font-size: 11px; margin-top: 10px;
+    font-family: 'Share Tech Mono', monospace; letter-spacing: 1px;
+  }
+  .online-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent3); box-shadow: 0 0 6px var(--accent3);
+    animation: pulse 3s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+  .song-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-left: 4px solid var(--accent2);
+    padding: 8px 14px;
+    margin-top: 14px;
+    width: fit-content;
+    margin-bottom: -1px;
+  }
+  .song-badge-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; font-family: 'Share Tech Mono', monospace; }
+  .song-badge-title { font-size: 14px; color: var(--accent2); font-family: 'Alfa Slab One', serif; letter-spacing: 1px; }
+  .song-note { font-size: 18px; color: var(--accent2); animation: strum 1.4s ease-in-out infinite alternate; }
+  @keyframes strum { from{transform:translateY(-1px) rotate(-5deg)} to{transform:translateY(1px) rotate(5deg)} }
+
+  /* TABS */
+  .tabs-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    position: sticky;
+    top: 44px;
+    z-index: 90;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 13px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+
+  /* CONTENT */
+  .page-content { display: none; padding: 28px 40px; }
+  .page-content.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+  .two-col { display: grid; grid-template-columns: 258px 1fr; gap: 20px; }
+
+  /* CARD */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--border2);
+    padding: 18px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .card.gold-top { border-top-color: var(--accent); }
+  .card.green-top { border-top-color: var(--accent3); }
+  .card-title {
+    font-family: 'Alfa Slab One', serif;
+    font-size: 14px;
+    color: var(--accent2);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ABOUT */
+  .about-field { margin-bottom: 10px; display: flex; gap: 8px; align-items: baseline; }
+  .about-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    white-space: nowrap;
+    min-width: 74px;
+  }
+  .about-value {
+    font-size: 13px;
+    color: var(--text);
+    font-family: 'Lora', serif;
+  }
+  .about-value.gold { color: var(--accent2); }
+  .about-value.green { color: var(--accent3); }
+  .about-value.red { color: var(--red2); }
+
+  /* BLURB */
+  .blurb-text {
+    font-size: 13.5px;
+    line-height: 1.9;
+    color: var(--text);
+    font-family: 'Lora', serif;
+    white-space: pre-line;
+  }
+  .blurb-text em { color: var(--accent2); font-style: italic; }
+  .blurb-text strong { color: var(--accent3); font-style: normal; font-weight: 400; }
+  .blurb-text s { color: var(--text-dim); }
+
+  /* MOOD */
+  .mood-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent3);
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .mood-bar em { color: var(--text); font-style: normal; }
+
+  /* LOYALTY METER */
+  .loyalty-meter {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+    margin-bottom: 16px;
+  }
+  .loyalty-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .loyalty-bar-bg {
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    height: 10px;
+    overflow: hidden;
+  }
+  .loyalty-bar-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, var(--accent3), var(--accent2));
+  }
+  .loyalty-note {
+    font-family: 'Lora', serif;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 5px;
+    font-style: italic;
+    text-align: right;
+  }
+
+  /* FRIENDS */
+  .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .friend-item { text-align: center; cursor: pointer; }
+  .friend-item img {
+    width: 70px; height: 70px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    filter: contrast(1.05) saturate(0.65) brightness(0.82);
+    display: block; margin: 0 auto 4px;
+    transition: all 0.2s;
+  }
+  .friend-item:hover img { filter: contrast(1) saturate(0.85) brightness(1); border-color: var(--accent2); }
+  .friend-name { font-size: 10px; color: var(--text-dim); font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; }
+
+  .friend-avatar-placeholder {
+    width: 70px; height: 70px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 4px;
+    font-family: 'Alfa Slab One', serif;
+    font-size: 20px;
+    color: var(--accent);
+    transition: all 0.2s;
+  }
+  .friend-item:hover .friend-avatar-placeholder { border-color: var(--accent2); color: var(--accent2); }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .contact-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 9px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .contact-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* TAGS */
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 3px 9px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'Lora', serif;
+    cursor: default;
+    transition: all 0.2s;
+  }
+  .tag:hover { border-color: var(--accent2); color: var(--text); }
+
+  /* PHOTOS */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 6px;
+  }
+  .photo-item {
+    aspect-ratio: 1; overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer; position: relative;
+  }
+  .photo-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1.08) saturate(0.65) brightness(0.82);
+    transition: all 0.3s;
+  }
+  .photo-item:hover img { filter: contrast(1) saturate(0.85) brightness(1.05); transform: scale(1.04); }
+  .photo-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(138,106,48,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* COMMENTS */
+  .post-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .post-item:last-child { border-bottom: none; }
+  .post-meta { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .post-author { font-family: 'Alfa Slab One', serif; font-size: 14px; color: var(--accent2); letter-spacing: 1px; }
+  .post-date { font-size: 10px; color: var(--text-dim); font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; }
+  .post-body { font-size: 13px; line-height: 1.7; color: var(--text); font-family: 'Lora', serif; }
+  .post-body em { color: var(--accent2); font-style: italic; }
+
+  /* PLAYLIST */
+  .playlist-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    font-family: 'Lora', serif; font-size: 13px;
+  }
+  .playlist-num { color: var(--text-dim); width: 20px; text-align: right; font-family: 'Share Tech Mono', monospace; font-size: 11px; }
+  .playlist-song { color: var(--text); }
+  .playlist-artist { color: var(--text-dim); font-size: 11px; font-family: 'Share Tech Mono', monospace; }
+  .playlist-info { flex: 1; }
+  .playlist-note { font-size: 10px; color: var(--accent2); font-style: italic; }
+
+  /* HOME BOX */
+  .home-box {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-left: 4px solid var(--accent3);
+    padding: 14px;
+    margin-bottom: 16px;
+    font-family: 'Lora', serif;
+    font-size: 12.5px;
+    color: var(--text-dim);
+    font-style: italic;
+    line-height: 1.7;
+  }
+  .home-box .label {
+    font-family: 'Alfa Slab One', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    margin-bottom: 6px;
+    font-style: normal;
+    text-transform: uppercase;
+  }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.95); z-index: 999;
+    align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lightbox-close {
+    position: absolute; top: 20px; right: 28px;
+    font-family: 'Alfa Slab One', serif;
+    font-size: 18px; color: var(--text-dim); cursor: pointer;
+    letter-spacing: 2px;
+  }
+  .lightbox-close:hover { color: var(--text-bright); }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="#"><span>my</span>Place</a>
+  <nav class="topbar-nav">
+    <a href="#">home</a>
+    <a href="#">search</a>
+    <a href="#">music</a>
+    <a href="hub.html" class="hub-link">◂ hub</a>
+  </nav>
+</div>
+
+<!-- BANNER -->
+<div class="banner-bar">
+  <span>★</span> cole_avery &nbsp;·&nbsp; 24 &nbsp;·&nbsp; hometown &nbsp;·&nbsp; <span>still here. still proud of it.</span>
+</div>
+
+<!-- PROFILE HEADER -->
+<div class="profile-header">
+  <div class="header-stripe"></div>
+  <div class="header-wood"></div>
+  <div class="header-bg-text">HOME</div>
+
+  <div class="profile-main-row">
+    <div class="avatar-wrap">
+      <img class="profile-avatar" src="https://i.pinimg.com/736x/0a/e1/11/0ae111dd3427f8b7ac191b20bd270e30.jpg" alt="Cole Avery">
+      <div class="avatar-badge">24</div>
+    </div>
+    <div class="profile-identity">
+      <div class="id-tag">// cole_avery · he/him · 24</div>
+      <div class="profile-display-name">Colton "Cole" Avery</div>
+      <div class="profile-handle">@ cole_avery &nbsp;·&nbsp; he/him &nbsp;·&nbsp; last online: after his shift</div>
+      <div class="profile-tagline">"you can say what you want about where I'm from. I've heard it."</div>
+      <div class="stat-row">
+        <div class="stat-item"><span class="stat-num">174</span><span class="stat-label">friends</span></div>
+        <div class="stat-item"><span class="stat-num">1</span><span class="stat-label">hometown</span></div>
+        <div class="stat-item"><span class="stat-num">∞</span><span class="stat-label">loyalty</span></div>
+        <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">plans to leave</span></div>
+      </div>
+      <div class="profile-online"><div class="online-dot"></div>online — just got back from the garage</div>
+      <div class="song-badge">
+        <span class="song-note">🎸</span>
+        <div>
+          <div class="song-badge-label">// defending this choice since forever</div>
+          <div class="song-badge-title">Sweet Home Alabama — Lynyrd Skynyrd</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('profile', this)">Profile</button>
+  <button class="tab-btn" onclick="showTab('photos', this)">Photos</button>
+  <button class="tab-btn" onclick="showTab('music', this)">Music</button>
+  <button class="tab-btn" onclick="showTab('comments', this)">Comments</button>
+</div>
+
+<!-- ===================== PROFILE TAB ===================== -->
+<div id="tab-profile" class="page-content active">
+  <div class="two-col">
+    <!-- LEFT -->
+    <div>
+      <div class="mood-bar">mood: <em>&nbsp;good. long day but good.</em></div>
+
+      <div class="loyalty-meter">
+        <div class="loyalty-label">// Loyalty Level</div>
+        <div class="loyalty-bar-bg"><div class="loyalty-bar-fill"></div></div>
+        <div class="loyalty-note">maxed out. always has been.</div>
+      </div>
+
+      <div class="home-box">
+        <div class="label">// On Home</div>
+        He stayed when everyone else left. He'll tell you it wasn't a sacrifice.
+        He's not entirely sure that's true anymore.
+        He doesn't say that part out loud.
+      </div>
+
+      <div class="card gold-top">
+        <div class="card-title">About</div>
+        <div class="about-field"><div class="about-label">age</div><div class="about-value">24</div></div>
+        <div class="about-field"><div class="about-label">location</div><div class="about-value">hometown. same one. always.</div></div>
+        <div class="about-field"><div class="about-label">ethnicity</div><div class="about-value">White (Southern American)</div></div>
+        <div class="about-field"><div class="about-label">status</div><div class="about-value gold">not looking. not not looking.</div></div>
+        <div class="about-field"><div class="about-label">eyes</div><div class="about-value">warm brown</div></div>
+        <div class="about-field"><div class="about-label">height</div><div class="about-value">6'1"</div></div>
+        <div class="about-field"><div class="about-label">job</div><div class="about-value">mechanic / construction / whatever needs doing</div></div>
+        <div class="about-field"><div class="about-label">accent</div><div class="about-value green">stronger when emotional. he knows.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Contact</div>
+        <div class="contact-grid">
+          <div class="contact-btn">✉ message</div>
+          <div class="contact-btn">+ add</div>
+          <div class="contact-btn">☆ favourite</div>
+          <div class="contact-btn">⚑ report</div>
+        </div>
+        <div style="font-family:'Lora',serif; font-size:11px; color:var(--text-dim); margin-top:10px; font-style:italic;">
+          will reply when he's not under a car. which is not always.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Top Friends</div>
+        <div class="friends-grid">
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">grandad</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">beau</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">mama</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">ray</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">dutch</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">coach t</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <div class="card gold-top">
+        <div class="card-title">About Me</div>
+        <div class="blurb-text">I work with my hands. Mechanic mostly, construction when there's work, whatever else needs doing. My granddad taught me most of it. My dad taught me the rest.
+
+I stayed here when a lot of people I know didn't. I get why they left. I don't hold it against anybody. I just — this is where things make sense to me. The people know me. I know the roads. I know which diner has good pie on Thursdays.
+
+People from outside sometimes look at me a certain way when I tell them where I'm from. I've gotten used to it. Doesn't mean I like it.
+
+<s>There are things about this place I don't agree with.</s>
+I don't really talk about that.
+
+I've turned down two things in the last few years that would've meant leaving. I told myself it was the right call both times. <em>Most days I still believe that.</em>
+
+I own one nice outfit. I hate wearing it. I'll wear it if I have to.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Who I'd Like To Meet</div>
+        <div class="blurb-text">someone who doesn't need me to apologize for where I'm from before we've even had a conversation.
+
+someone patient enough to sit on a porch and not fill every quiet with noise.
+
+<em>someone who'd tell me honestly if they think I made a mistake staying.</em>
+
+someone my grandparents would be glad to feed. that's the real bar.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Interests</div>
+        <div class="tag-cloud">
+          <div class="tag">mechanics</div>
+          <div class="tag">Sweet Home Alabama (not up for debate)</div>
+          <div class="tag">working with hands</div>
+          <div class="tag">outdoors</div>
+          <div class="tag">community</div>
+          <div class="tag">his one go-to joke</div>
+          <div class="tag">motor oil smell</div>
+          <div class="tag">cheesy reality TV (denied)</div>
+          <div class="tag">front porches</div>
+          <div class="tag">loyalty</div>
+          <div class="tag">volunteering</div>
+          <div class="tag">cars</div>
+          <div class="tag">dancing (denied)</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">General</div>
+        <div style="font-family:'Lora',serif; font-size:13px; line-height:2.1; color:var(--text-dim);">
+          <span style="color:var(--text);">Hair:</span> light brown. short and practical. always.<br>
+          <span style="color:var(--text);">Build:</span> broad-shouldered. solid. built from doing, not posing.<br>
+          <span style="color:var(--text);">Hands:</span> calloused. scar on forearm from a work accident.<br>
+          <span style="color:var(--text);">Tic:</span> hand on back of neck when awkward. leans on things. taps rhythm on surfaces.<br>
+          <span style="color:var(--text);">Smell:</span> outdoors. grass, wood, motor oil.<br>
+          <span style="color:var(--text);">Dancing:</span> claims he doesn't. absolutely will. right song required.<br>
+          <span style="color:var(--text);">Record:</span> clean.<br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHOTOS TAB ===================== -->
+<div id="tab-photos" class="page-content">
+  <div class="card">
+    <div class="card-title">Photos — cole_avery</div>
+    <div style="font-size:11px; color:var(--text-dim); margin-bottom:14px; font-family:'Share Tech Mono',monospace; letter-spacing:1px;">20 photos · mostly taken by other people · he didn't know what to do with his face in half of them</div>
+    <div class="photo-grid" id="photoGrid"></div>
+  </div>
+</div>
+
+<!-- ===================== MUSIC TAB ===================== -->
+<div id="tab-music" class="page-content">
+  <div class="two-col">
+    <div>
+      <div class="card gold-top">
+        <div class="card-title">Currently Playing</div>
+        <div class="playlist-item"><div class="playlist-num">1</div><div class="playlist-info"><div class="playlist-song">Sweet Home Alabama</div><div class="playlist-artist">Lynyrd Skynyrd</div></div><div class="playlist-note">not a debate. moving on.</div></div>
+        <div class="playlist-item"><div class="playlist-num">2</div><div class="playlist-info"><div class="playlist-song">Simple Man</div><div class="playlist-artist">Lynyrd Skynyrd</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">3</div><div class="playlist-info"><div class="playlist-song">Take Me Home, Country Roads</div><div class="playlist-artist">John Denver</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">4</div><div class="playlist-info"><div class="playlist-song">Friends in Low Places</div><div class="playlist-artist">Garth Brooks</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">5</div><div class="playlist-info"><div class="playlist-song">Ring of Fire</div><div class="playlist-artist">Johnny Cash</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">6</div><div class="playlist-info"><div class="playlist-song">Jolene</div><div class="playlist-artist">Dolly Parton</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">7</div><div class="playlist-info"><div class="playlist-song">Chicken Fried</div><div class="playlist-artist">Zac Brown Band</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">8</div><div class="playlist-info"><div class="playlist-song">The House That Built Me</div><div class="playlist-artist">Miranda Lambert</div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">Favourite Artists</div>
+        <div class="tag-cloud">
+          <div class="tag">Lynyrd Skynyrd</div>
+          <div class="tag">Johnny Cash</div>
+          <div class="tag">Dolly Parton</div>
+          <div class="tag">Garth Brooks</div>
+          <div class="tag">Zac Brown Band</div>
+          <div class="tag">Miranda Lambert</div>
+          <div class="tag">John Denver</div>
+          <div class="tag">Hank Williams</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">On Sweet Home Alabama</div>
+        <div class="blurb-text" style="font-size:13px; color:var(--text-dim);">
+He will defend this song like it's a <em>personal attack</em> if you say anything.
+
+He has said this multiple times.
+Nobody has tested it more than once.
+
+He knows every word. He has never once claimed otherwise. He's not embarrassed about it.
+<em>That's actually kind of the whole thing with Cole.</em></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== COMMENTS TAB ===================== -->
+<div id="tab-comments" class="page-content">
+  <div style="max-width:680px;">
+    <div class="card">
+      <div class="card-title">Comments (10)</div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">beau_k</div><div class="post-date">yesterday</div></div>
+        <div class="post-body">you claimed you "don't dance" and then I watched you do a full two-step at the Hendersons' thing when Sweet Home Alabama came on. unprompted. alone. near the cooler.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">cole_avery</div><div class="post-date">yesterday</div></div>
+        <div class="post-body">I was stretching.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">beau_k</div><div class="post-date">yesterday</div></div>
+        <div class="post-body">cole.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ray_d</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body">hey can you look at my truck this weekend? it's making that sound again</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">cole_avery</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body">yeah. bring it by Saturday morning. and tell me you checked the coolant this time.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ray_d</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body"><em>...I'll see you Saturday</em></div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">dutch_p</div><div class="post-date">last week</div></div>
+        <div class="post-body">somebody at trivia said Sweet Home Alabama is overrated and I have never seen you put your drink down that fast</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">cole_avery</div><div class="post-date">last week</div></div>
+        <div class="post-body">I was being calm about it.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">dutch_p</div><div class="post-date">last week</div></div>
+        <div class="post-body">you were not being calm. you listed the guitar solo note by note.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">grandad_avery</div><div class="post-date">2 weeks ago</div></div>
+        <div class="post-body">Son I figured out how to put a message on here. Good work on the Hargrove job. Your grandmother says you need to come to dinner. Not a request.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-close">close ✕</div>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const photos = [
+    "https://i.pinimg.com/736x/0a/e1/11/0ae111dd3427f8b7ac191b20bd270e30.jpg",
+    "https://i.pinimg.com/736x/0d/cb/fc/0dcbfce85bbbfd93a5218bd785aa7978.jpg",
+    "https://i.pinimg.com/736x/2e/c4/ca/2ec4ca4f36fe6010284b4e77efdea8cf.jpg",
+    "https://i.pinimg.com/736x/2f/85/ec/2f85ec32114b5576f203f80021f604ec.jpg",
+    "https://i.pinimg.com/736x/3a/c1/98/3ac198bff05aa3749e3daf18380f21ba.jpg",
+    "https://i.pinimg.com/736x/42/9e/de/429ede77b1c9538f2b7a88d134d3297d.jpg",
+    "https://i.pinimg.com/736x/4c/c2/4c/4cc24c5ac965c8944cf865c6d98a87ee.jpg",
+    "https://i.pinimg.com/736x/53/13/41/531341c4ec37fd2266ec7571aeeb9bdf.jpg",
+    "https://i.pinimg.com/736x/59/39/8f/59398fb995b85108c5a01955c1aa7d11.jpg",
+    "https://i.pinimg.com/736x/63/d2/28/63d2286a9285bdeb82d5e5d70f0a8470.jpg",
+    "https://i.pinimg.com/736x/6f/32/ad/6f32ad7c666488aa1d492050bc411356.jpg",
+    "https://i.pinimg.com/736x/82/80/7d/82807db14995877e757e155a6f18840a.jpg",
+    "https://i.pinimg.com/736x/93/44/5d/93445dafeabbfa3b9c95e1651b6f5b0a.jpg",
+    "https://i.pinimg.com/736x/a1/c1/3f/a1c13f8831ca7a28b6ad7c3b037325ba.jpg",
+    "https://i.pinimg.com/736x/ca/d8/fa/cad8fa100f1d06e0f50dd6507f32f5ba.jpg",
+    "https://i.pinimg.com/736x/cf/6f/61/cf6f612390b0bb19e33469aa5e1c0357.jpg",
+    "https://i.pinimg.com/736x/dd/af/8a/ddaf8a9e2a2392480522495756b5d2ce.jpg",
+    "https://i.pinimg.com/736x/f0/15/7e/f0157e7070961d722f3fba4823d235c5.jpg",
+    "https://i.pinimg.com/736x/f7/32/2e/f7322e05a178d4e18b84351e35b52913.jpg",
+    "https://i.pinimg.com/736x/f9/56/eb/f956eb63ea4e6c85ad7eef3e141150cf.jpg"
+  ];
+
+  const grid = document.getElementById('photoGrid');
+  photos.forEach(src => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    const img = document.createElement('img');
+    img.src = src; img.alt = '';
+    img.onclick = () => openLightbox(src);
+    div.appendChild(img);
+    grid.appendChild(div);
+  });
+
+  function showTab(name, btn) {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+</script>
+</body>
+</html>
