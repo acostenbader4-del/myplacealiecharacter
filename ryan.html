@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ryan_mercer // MySpace</title>
+<title>ryan_mercer // myPlace</title>
 <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Share+Tech+Mono&family=Barlow:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -434,13 +434,29 @@
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border); }
   ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  .friend-avatar-placeholder {
+    width: 70px; height: 70px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 4px;
+    font-family: 'Permanent Marker', cursive;
+    font-size: 20px;
+    color: var(--accent);
+    transition: all 0.2s;
+  }
+  .friend-item:hover .friend-avatar-placeholder {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
 </style>
 </head>
 <body>
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <a class="topbar-logo" href="#"><span>my</span>space</a>
+  <a class="topbar-logo" href="#"><span>my</span>Place</a>
   <nav class="topbar-nav">
     <a href="#">home</a>
     <a href="#">search</a>
@@ -485,7 +501,6 @@
 <div class="tabs-bar">
   <button class="tab-btn active" onclick="showTab('profile', this)">Profile</button>
   <button class="tab-btn" onclick="showTab('photos', this)">Photos</button>
-  <button class="tab-btn" onclick="showTab('blog', this)">Blog</button>
   <button class="tab-btn" onclick="showTab('music', this)">Music</button>
   <button class="tab-btn" onclick="showTab('comments', this)">Comments</button>
 </div>
@@ -523,28 +538,34 @@
         <div class="card-title">Top Friends</div>
         <div class="friends-grid">
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/52/d3/0e/52d30e1a13da45a241be0647d8b17371.jpg" alt="">
-            <div class="friend-name">dex</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">dex
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/73/48/9c/73489c4ec61e97ce2958e1e23135addc.jpg" alt="">
-            <div class="friend-name">jamie</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">jamie
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/9d/ef/f9/9deff9c3070c8c1f1ea9872f42f6d614.jpg" alt="">
-            <div class="friend-name">nobody</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">nobody
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/a5/fd/04/a5fd0441b4aa9af40de80b3ab3b6f4e7.jpg" alt="">
-            <div class="friend-name">ash</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">ash
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/d1/52/93/d1529301030241882c0fd872aee1540d.jpg" alt="">
-            <div class="friend-name">??</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">??
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/71/e1/f7/71e1f7afda8fa55730fb941ec8af854c.jpg" alt="">
-            <div class="friend-name">lou</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">lou
+          </div>
           </div>
         </div>
       </div>
@@ -634,74 +655,6 @@ honestly? anyone who's going somewhere. I'm tired of people who are just... here
   </div>
 </div>
 
-<!-- ===================== BLOG TAB ===================== -->
-<div id="tab-blog" class="page-content">
-  <div style="max-width:700px;">
-
-    <div class="blog-entry">
-      <div class="blog-title">things I don't care about (a list)</div>
-      <div class="blog-meta">posted: yesterday &nbsp;·&nbsp; views: 6</div>
-      <div class="blog-body">the future.
-what people think.
-fixing the guitar.
-whether the band actually practices.
-that guy who said I was "wasting potential." 
-<em>potential for what exactly?</em>
-graduating properly.
-getting my shifts right.
-being "somewhere" by now.
-
-[see also: things I think about constantly at 3am when I can't sleep]
-
-don't say anything.</div>
-    </div>
-
-    <div class="blog-entry">
-      <div class="blog-title">the show last saturday</div>
-      <div class="blog-meta">posted: 5 days ago &nbsp;·&nbsp; views: 14</div>
-      <div class="blog-body">the band was called something with three letters that I already forgot. there were maybe twelve people there including the band.
-
-I crowd-surfed anyway.
-
-for like four seconds I was weightless and loud and it didn't matter that I didn't know anyone or that I had a 6am shift the next day or that I've been the same person in the same town for 21 years.
-
-then I hit the floor kind of hard and dex laughed at me for the rest of the night.
-
-<em>still worth it.</em>
-
-I'm not saying anything else about it.</div>
-    </div>
-
-    <div class="blog-entry">
-      <div class="blog-title">I know every word to smells like teen spirit</div>
-      <div class="blog-meta">posted: 2 weeks ago &nbsp;·&nbsp; views: 3</div>
-      <div class="blog-body">I'm not going to explain this.
-
-I just.
-
-<s>I care about it ok.</s>
-
-forget I wrote this.</div>
-    </div>
-
-    <div class="blog-entry">
-      <div class="blog-title">re: mom asking if I'm "okay"</div>
-      <div class="blog-meta">posted: last month &nbsp;·&nbsp; views: 2</div>
-      <div class="blog-body">yeah.
-
-I mean.
-
-probably.
-
-<em>I don't know what okay looks like so it's hard to tell.</em>
-
-she works like eighty hours a week so she asked me in the doorway on her way out and I said "yeah" and she nodded and left and that was the check-in.
-
-it's fine. that's just how it is.</div>
-    </div>
-
-  </div>
-</div>
 
 <!-- ===================== MUSIC TAB ===================== -->
 <div id="tab-music" class="page-content">
