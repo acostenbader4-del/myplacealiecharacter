@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>nova_reyes // MySpace</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b0a;
+    --bg2: #0c100f;
+    --bg3: #111614;
+    --border: #1e2a26;
+    --border2: #2a3a34;
+    --accent: #2a7a5a;
+    --accent2: #3ab87a;
+    --accent3: #ff4a2a;
+    --text: #a8c0b4;
+    --text-dim: #4a6058;
+    --text-bright: #d0e8dc;
+    --gold: #c8a84a;
+    --warn: #8a3020;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    background-image:
+      repeating-linear-gradient(
+        90deg, transparent 0px, transparent 60px,
+        rgba(42,122,90,0.015) 60px, rgba(42,122,90,0.015) 61px
+      ),
+      repeating-linear-gradient(
+        0deg, transparent 0px, transparent 60px,
+        rgba(42,122,90,0.015) 60px, rgba(42,122,90,0.015) 61px
+      );
+  }
+
+  /* SCAN LINE OVERLAY */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent 0px, transparent 3px,
+      rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 4px
+    );
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+  .topbar-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    color: var(--accent2);
+    text-decoration: none;
+    letter-spacing: 3px;
+  }
+  .topbar-logo span { color: var(--text-dim); }
+  .topbar-nav { display: flex; gap: 20px; align-items: center; }
+  .topbar-nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Share Tech Mono', monospace;
+    transition: color 0.2s;
+  }
+  .topbar-nav a:hover { color: var(--accent2); }
+  .hub-link {
+    background: var(--accent);
+    color: var(--text-bright) !important;
+    padding: 5px 12px;
+    font-size: 11px !important;
+    border: 1px solid var(--accent2);
+  }
+
+  /* ALERT STRIP */
+  .alert-strip {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--warn);
+    padding: 5px 40px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--warn);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .alert-dot { width: 6px; height: 6px; background: var(--accent3); border-radius: 50%; animation: blink 1s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* PROFILE HEADER */
+  .profile-header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-grid-bg {
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent 0, transparent 40px, rgba(42,122,90,0.04) 40px, rgba(42,122,90,0.04) 41px),
+      repeating-linear-gradient(0deg, transparent 0, transparent 40px, rgba(42,122,90,0.04) 40px, rgba(42,122,90,0.04) 41px);
+    pointer-events: none;
+  }
+  .corner-bracket {
+    position: absolute;
+    width: 30px; height: 30px;
+    border-color: var(--accent);
+    border-style: solid;
+    border-width: 0;
+  }
+  .corner-bracket.tl { top: 12px; left: 12px; border-top-width: 2px; border-left-width: 2px; }
+  .corner-bracket.tr { top: 12px; right: 12px; border-top-width: 2px; border-right-width: 2px; }
+  .corner-bracket.bl { bottom: 0; left: 12px; border-bottom-width: 2px; border-left-width: 2px; }
+  .corner-bracket.br { bottom: 0; right: 12px; border-bottom-width: 2px; border-right-width: 2px; }
+
+  .profile-main-row {
+    display: flex;
+    gap: 28px;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar-container {
+    position: relative;
+    flex-shrink: 0;
+    width: 120px;
+  }
+  .avatar-frame {
+    position: absolute; inset: -4px;
+    border: 1px solid var(--accent);
+    clip-path: polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px);
+  }
+  .profile-avatar {
+    width: 120px; height: 120px;
+    object-fit: cover;
+    display: block;
+    filter: contrast(1.15) saturate(0.6) brightness(0.9);
+    clip-path: polygon(6px 0%, 100% 0%, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0% 100%, 0% 6px);
+    transition: filter 0.3s;
+  }
+  .profile-avatar:hover { filter: contrast(1.05) saturate(0.85) brightness(1.05); }
+  .avatar-status {
+    position: absolute;
+    bottom: -10px; left: 0; right: 0;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    background: var(--bg2);
+    padding: 3px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .profile-identity { flex: 1; padding-bottom: 18px; }
+  .id-tag {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .profile-display-name {
+    font-family: 'Orbitron', monospace;
+    font-size: 26px;
+    color: var(--text-bright);
+    font-weight: 700;
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .profile-handle {
+    color: var(--accent2);
+    font-size: 12px;
+    margin-top: 4px;
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+  }
+  .profile-tagline {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    font-style: italic;
+    max-width: 420px;
+    font-weight: 300;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 0;
+    margin-top: 16px;
+    border: 1px solid var(--border);
+    width: fit-content;
+  }
+  .stat-item {
+    padding: 8px 18px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    color: var(--accent2);
+    display: block;
+  }
+  .stat-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .song-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    padding: 8px 14px;
+    margin-top: 14px;
+    width: fit-content;
+    margin-bottom: -1px;
+  }
+  .song-badge-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; font-family: 'Share Tech Mono', monospace; }
+  .song-badge-title { font-size: 13px; color: var(--accent2); font-family: 'Share Tech Mono', monospace; }
+  .song-note { font-size: 16px; color: var(--accent2); animation: pulse-glow 2s infinite alternate; }
+  @keyframes pulse-glow { from{text-shadow:none} to{text-shadow:0 0 8px var(--accent2)} }
+
+  /* TABS */
+  .tabs-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    position: sticky;
+    top: 44px;
+    z-index: 90;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 13px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+
+  /* CONTENT */
+  .page-content { display: none; padding: 28px 40px; }
+  .page-content.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+  .two-col { display: grid; grid-template-columns: 260px 1fr; gap: 20px; }
+
+  /* CARD */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 18px;
+    margin-bottom: 16px;
+    position: relative;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 0 12px 12px 0;
+    border-color: transparent var(--border) transparent transparent;
+  }
+  .card-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 11px;
+    color: var(--accent2);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* ABOUT FIELDS */
+  .about-field { margin-bottom: 10px; display: flex; gap: 8px; align-items: baseline; }
+  .about-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    white-space: nowrap;
+    min-width: 80px;
+  }
+  .about-value {
+    font-size: 12px;
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+  }
+  .about-value.hot { color: var(--accent3); }
+  .about-value.green { color: var(--accent2); }
+
+  /* BLURB */
+  .blurb-text {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+    white-space: pre-line;
+  }
+  .blurb-text em { color: var(--accent2); font-style: normal; font-weight: 500; }
+  .blurb-text .redacted {
+    background: var(--text-dim);
+    color: var(--text-dim);
+    padding: 0 4px;
+    user-select: none;
+    cursor: not-allowed;
+  }
+  .blurb-text .redacted:hover {
+    background: transparent;
+    color: var(--text);
+    cursor: text;
+  }
+
+  /* MOOD */
+  .mood-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent3);
+    margin-bottom: 16px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+  }
+  .mood-bar em { color: var(--text); }
+
+  /* FRIENDS */
+  .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .friend-item { text-align: center; cursor: pointer; }
+  .friend-item img {
+    width: 70px; height: 70px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    filter: contrast(1.1) saturate(0.5) brightness(0.8);
+    display: block; margin: 0 auto 4px;
+    clip-path: polygon(4px 0%, 100% 0%, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0% 100%, 0% 4px);
+    transition: all 0.2s;
+  }
+  .friend-item:hover img { filter: contrast(1) saturate(0.75) brightness(1); border-color: var(--accent2); }
+  .friend-name { font-size: 9px; color: var(--text-dim); font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .contact-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 9px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
+  }
+  .contact-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* TAGS */
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 3px 9px;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    cursor: default;
+    transition: all 0.2s;
+    letter-spacing: 1px;
+  }
+  .tag:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* PHOTOS */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 6px;
+  }
+  .photo-item {
+    aspect-ratio: 1; overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer; position: relative;
+    clip-path: polygon(4px 0%, 100% 0%, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0% 100%, 0% 4px);
+  }
+  .photo-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1.1) saturate(0.5) brightness(0.8);
+    transition: all 0.3s;
+  }
+  .photo-item:hover img { filter: contrast(1.05) saturate(0.8) brightness(1); transform: scale(1.04); }
+  .photo-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(42,122,90,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* BLOG */
+  .blog-entry { margin-bottom: 28px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+  .blog-entry:last-child { border-bottom: none; }
+  .blog-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .blog-meta {
+    font-size: 9px; color: var(--text-dim);
+    font-family: 'Share Tech Mono', monospace;
+    margin-bottom: 12px; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .blog-body {
+    font-size: 13px; line-height: 1.85;
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 300;
+    white-space: pre-line;
+  }
+  .blog-body em { color: var(--accent2); font-style: normal; font-weight: 500; }
+  .blog-body .redacted {
+    background: var(--text-dim); color: var(--text-dim);
+    padding: 0 4px; user-select: none; cursor: not-allowed;
+  }
+  .blog-body .redacted:hover { background: transparent; color: var(--text); cursor: text; }
+
+  /* COMMENTS */
+  .post-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .post-item:last-child { border-bottom: none; }
+  .post-meta { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .post-author { font-family: 'Orbitron', monospace; font-size: 12px; color: var(--accent2); }
+  .post-date { font-size: 9px; color: var(--text-dim); font-family: 'Share Tech Mono', monospace; letter-spacing: 1px; }
+  .post-body { font-size: 13px; line-height: 1.7; color: var(--text); font-family: 'Rajdhani', sans-serif; }
+  .post-body em { color: var(--accent2); font-style: italic; }
+
+  /* PLAYLIST */
+  .playlist-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 0; border-bottom: 1px solid var(--border);
+    font-family: 'Share Tech Mono', monospace; font-size: 11px;
+  }
+  .playlist-num { color: var(--text-dim); width: 18px; text-align: right; }
+  .playlist-song { color: var(--text); }
+  .playlist-artist { color: var(--text-dim); font-size: 10px; }
+  .playlist-info { flex: 1; }
+  .playlist-note { font-size: 9px; color: var(--accent3); }
+
+  /* INCIDENT BOX */
+  .incident-box {
+    background: var(--bg3);
+    border: 1px solid var(--warn);
+    border-left: 3px solid var(--accent3);
+    padding: 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--warn);
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .incident-box .label {
+    font-size: 9px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 6px; color: var(--accent3);
+  }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.95); z-index: 999;
+    align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lightbox-close {
+    position: absolute; top: 20px; right: 28px;
+    font-size: 22px; color: var(--accent2); cursor: pointer;
+    font-family: 'Orbitron', monospace; letter-spacing: 2px;
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="#"><span>MY</span>SPACE</a>
+  <nav class="topbar-nav">
+    <a href="#">home</a>
+    <a href="#">search</a>
+    <a href="#">music</a>
+    <a href="hub.html" class="hub-link">◂ hub</a>
+  </nav>
+</div>
+
+<!-- ALERT STRIP -->
+<div class="alert-strip">
+  <div class="alert-dot"></div>
+  profile access logged &nbsp;·&nbsp; viewer discretion advised &nbsp;·&nbsp; some info redacted
+</div>
+
+<!-- PROFILE HEADER -->
+<div class="profile-header">
+  <div class="header-grid-bg"></div>
+  <div class="corner-bracket tl"></div>
+  <div class="corner-bracket tr"></div>
+  <div class="corner-bracket bl"></div>
+  <div class="corner-bracket br"></div>
+
+  <div class="profile-main-row">
+    <div class="avatar-container">
+      <div class="avatar-frame"></div>
+      <img class="profile-avatar" src="https://i.pinimg.com/736x/0b/b4/27/0bb4276409fb777fb0a606a6a5373c59.jpg" alt="Nova Reyes">
+      <div class="avatar-status">ONLINE // NIGHT SHIFT</div>
+    </div>
+    <div class="profile-identity">
+      <div class="id-tag">// ID_0047 &nbsp;·&nbsp; access: limited</div>
+      <div class="profile-display-name">NOVA REYES</div>
+      <div class="profile-handle">@ nova_r &nbsp;·&nbsp; 22 &nbsp;·&nbsp; they/she</div>
+      <div class="profile-tagline">"don't ask about the scar. don't ask about the incident. don't ask."</div>
+      <div class="stat-row">
+        <div class="stat-item"><span class="stat-num">61</span><span class="stat-label">friends</span></div>
+        <div class="stat-item"><span class="stat-num">???</span><span class="stat-label">affiliations</span></div>
+        <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">texts back</span></div>
+        <div class="stat-item"><span class="stat-num">∞</span><span class="stat-label">energy drinks</span></div>
+      </div>
+      <div class="song-badge">
+        <span class="song-note">♪</span>
+        <div>
+          <div class="song-badge-label">// repeat: 1</div>
+          <div class="song-badge-title">Radioactive — Imagine Dragons</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('profile', this)">Profile</button>
+  <button class="tab-btn" onclick="showTab('photos', this)">Photos</button>
+  <button class="tab-btn" onclick="showTab('blog', this)">Blog</button>
+  <button class="tab-btn" onclick="showTab('music', this)">Music</button>
+  <button class="tab-btn" onclick="showTab('comments', this)">Comments</button>
+</div>
+
+<!-- ===================== PROFILE TAB ===================== -->
+<div id="tab-profile" class="page-content active">
+  <div class="two-col">
+    <!-- LEFT -->
+    <div>
+      <div class="mood-bar">status: <em>&nbsp;controlled. mostly.</em></div>
+
+      <div class="incident-box">
+        <div class="label">// notice</div>
+        certain information on this profile has been omitted.
+        hover redacted fields to reveal — if you think that's a good idea.
+      </div>
+
+      <div class="card">
+        <div class="card-title">// Data</div>
+        <div class="about-field"><div class="about-label">age</div><div class="about-value">22</div></div>
+        <div class="about-field"><div class="about-label">location</div><div class="about-value">night shift. warehouse district.</div></div>
+        <div class="about-field"><div class="about-label">ethnicity</div><div class="about-value">Mexican-American</div></div>
+        <div class="about-field"><div class="about-label">status</div><div class="about-value hot">don't.</div></div>
+        <div class="about-field"><div class="about-label">eyes</div><div class="about-value">dark brown / gold in some light</div></div>
+        <div class="about-field"><div class="about-label">height</div><div class="about-value">5'6"</div></div>
+        <div class="about-field"><div class="about-label">job</div><div class="about-value">night warehouse. + other things.</div></div>
+        <div class="about-field"><div class="about-label">record</div><div class="about-value hot">nothing proven.</div></div>
+        <div class="about-field"><div class="about-label">incident</div><div class="about-value"><span class="redacted">fire. i caused it. partially.</span></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">// Contact</div>
+        <div class="contact-grid">
+          <div class="contact-btn">✉ message</div>
+          <div class="contact-btn">+ add</div>
+          <div class="contact-btn">⚑ report</div>
+          <div class="contact-btn">✗ leave</div>
+        </div>
+        <div style="font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--text-dim); margin-top:10px; letter-spacing:1px;">
+          // response rate: low. will show up in person if it matters.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">// Top Network</div>
+        <div class="friends-grid">
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/3a/86/7e/3a867ec940e40300a2d3e7447e75b7c8.jpg" alt="">
+            <div class="friend-name">sable</div>
+          </div>
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/4b/4e/cd/4b4ecd0875b37e59ce5a11dd9ae482b6.jpg" alt="">
+            <div class="friend-name">ro</div>
+          </div>
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/6a/be/cb/6abecbfe43f1c0a323d492628d17682d.jpg" alt="">
+            <div class="friend-name">[private]</div>
+          </div>
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/7a/3f/27/7a3f278fabb927b7d989ed2db8c2d421.jpg" alt="">
+            <div class="friend-name">cass (sibling)</div>
+          </div>
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/b6/1f/9d/b61f9deeecab74f8511c8d6dc9e349d0.jpg" alt="">
+            <div class="friend-name">[private]</div>
+          </div>
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/d4/c2/0a/d4c20a058b22c252252a4d6b6dd299ee.jpg" alt="">
+            <div class="friend-name">[private]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <div class="card">
+        <div class="card-title">// About</div>
+        <div class="blurb-text">I work nights. I like it that way.
+
+Less people. More quiet. More time to think without someone watching your face while you do it.
+
+I've been told I'm "intense." I don't know what the alternative is.
+
+The scar on my collarbone is from before. A lot of things are from before. I don't separate my life into chapters — I don't think it works that way — but there's a clear line between <em>then</em> and <em>now</em> and I don't cross it going backward.
+
+I feed strays when I find them. I don't explain that to people. It's not a contradiction.
+
+I listen to the same song when I can't sleep. That's not information I give out. <span class="redacted">it's radioactive and i've listened to it 400 times this month</span>
+
+I don't text back fast. I will show up in person if something is actually wrong. There's a difference and most people don't understand it until they need it.
+
+I cut people off sometimes. I tell myself it's to protect them.
+<span class="redacted">i'm not sure that's always true.</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">// Who I'd Like To Meet</div>
+        <div class="blurb-text">someone who doesn't need me to explain myself.
+
+someone who understands that silence isn't the same as absence.
+
+someone my sibling would like. that's a real bar I have.
+
+<em>not someone who tries to figure me out. I'm not a puzzle. I'm just careful.</em></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">// Interests</div>
+        <div class="tag-cloud">
+          <div class="tag">night shifts</div>
+          <div class="tag">stray animals</div>
+          <div class="tag">energy drinks</div>
+          <div class="tag">radioactive (the song)</div>
+          <div class="tag">mechanics</div>
+          <div class="tag">exits (scanning them)</div>
+          <div class="tag">silence</div>
+          <div class="tag">fire (complicated)</div>
+          <div class="tag">protective instincts</div>
+          <div class="tag">takeout food</div>
+          <div class="tag">not explaining myself</div>
+          <div class="tag">surviving</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">// General</div>
+        <div style="font-family:'Share Tech Mono',monospace; font-size:11px; line-height:2.1; color:var(--text-dim);">
+          <span style="color:var(--text);">Body:</span> athletic. wiry. built from actual work<br>
+          <span style="color:var(--text);">Tattoos:</span> geometric on neck (meaning: private). cracked sun on forearm.<br>
+          <span style="color:var(--text);">Scars:</span> collarbone. faint burns one arm.<br>
+          <span style="color:var(--text);">Voice:</span> low. controlled. steady.<br>
+          <span style="color:var(--text);">Cooking:</span> cannot. lives on takeout.<br>
+          <span style="color:var(--text);">Texting:</span> bad at it. shows up in person instead.<br>
+          <span style="color:var(--text);">PTSD:</span> <span style="color:var(--text-dim);">[they don't call it that]</span><br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHOTOS TAB ===================== -->
+<div id="tab-photos" class="page-content">
+  <div class="card">
+    <div class="card-title">// Image Archive</div>
+    <div style="font-size:10px; color:var(--text-dim); margin-bottom:14px; font-family:'Share Tech Mono',monospace; letter-spacing:1px;">20 files &nbsp;·&nbsp; most taken without asking. a few on purpose.</div>
+    <div class="photo-grid" id="photoGrid"></div>
+  </div>
+</div>
+
+<!-- ===================== BLOG TAB ===================== -->
+<div id="tab-blog" class="page-content">
+  <div style="max-width:700px;">
+
+    <div class="blog-entry">
+      <div class="blog-title">// ON STRAY ANIMALS</div>
+      <div class="blog-meta">posted: 4 days ago &nbsp;·&nbsp; views: 9</div>
+      <div class="blog-body">found another one behind the warehouse last week. orange tabby, half-starved, mean as hell until I sat down on the ground next to it and didn't move for a while.
+
+it let me feed it eventually.
+
+people keep asking why I bother. like it's strange to feed something that can't say thank you.
+
+<em>I don't need the thank you. I just need to know it ate something.</em>
+
+I'm keeping this one. don't tell anyone.</div>
+    </div>
+
+    <div class="blog-entry">
+      <div class="blog-title">// ON THE INCIDENT (partial)</div>
+      <div class="blog-meta">posted: 3 weeks ago &nbsp;·&nbsp; views: 4</div>
+      <div class="blog-body">people ask sometimes. I don't answer.
+
+not because I'm protecting a secret. more because <span class="redacted">I was there and I made a call and I'd probably make the same one and I don't know what that says about me.</span>
+
+what I will say:
+
+I disappeared for a while after. came back different. not worse — different. I was afraid for a long time that the change was permanent in a way I couldn't undo.
+
+now I think the change is just <em>me</em>.
+
+I don't know if that's better or worse. It's just true.
+
+<span class="redacted">sometimes I miss it. the clarity. everything was very simple when I was just trying to survive.</span></div>
+    </div>
+
+    <div class="blog-entry">
+      <div class="blog-title">// CASS</div>
+      <div class="blog-meta">posted: last month &nbsp;·&nbsp; views: 2</div>
+      <div class="blog-body">my sibling called today to tell me about a grade they got. good one. didn't have to call me but they did.
+
+I'm not going to say what I felt about that. It's private.
+
+I will say: the whole reason I do what I do — the night shifts, the careful decisions, the staying far enough away that nothing I'm involved in touches them — is so they never have to know what I know.
+
+<em>they deserve a life that's just... easy. clean. theirs.</em>
+
+I'm working on making sure of it.</div>
+    </div>
+
+    <div class="blog-entry">
+      <div class="blog-title">// 3AM / can't sleep again</div>
+      <div class="blog-meta">posted: last month &nbsp;·&nbsp; views: 1</div>
+      <div class="blog-body">the song is on again. 
+I'm not going to say which one. <span class="redacted">radioactive. again. 3rd time tonight.</span>
+
+there's something about it. I woke up in a new age — that part. the kingdom come, that's calling me. 
+
+I don't know. it just feels accurate. like something I would have written if I could write things.
+
+I should sleep. I have a 6am.
+
+I'm not going to sleep.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== MUSIC TAB ===================== -->
+<div id="tab-music" class="page-content">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-title">// Current Loop</div>
+        <div class="playlist-item"><div class="playlist-num">1</div><div class="playlist-info"><div class="playlist-song">Radioactive</div><div class="playlist-artist">Imagine Dragons</div></div><div class="playlist-note">x400+ this month</div></div>
+        <div class="playlist-item"><div class="playlist-num">2</div><div class="playlist-info"><div class="playlist-song">Radioactive</div><div class="playlist-artist">Imagine Dragons</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">3</div><div class="playlist-info"><div class="playlist-song">Radioactive</div><div class="playlist-artist">Imagine Dragons</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">4</div><div class="playlist-info"><div class="playlist-song">Warriors</div><div class="playlist-artist">Imagine Dragons</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">5</div><div class="playlist-info"><div class="playlist-song">Demons</div><div class="playlist-artist">Imagine Dragons</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">6</div><div class="playlist-info"><div class="playlist-song">Friction</div><div class="playlist-artist">Imagine Dragons</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">7</div><div class="playlist-info"><div class="playlist-song">Monster</div><div class="playlist-artist">Imagine Dragons</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">8</div><div class="playlist-info"><div class="playlist-song">Ready Aim Fire</div><div class="playlist-artist">Imagine Dragons</div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">// Other Artists</div>
+        <div class="tag-cloud">
+          <div class="tag">Linkin Park</div>
+          <div class="tag">Nine Inch Nails</div>
+          <div class="tag">Rage Against the Machine</div>
+          <div class="tag">System of a Down</div>
+          <div class="tag">Deftones</div>
+          <div class="tag">Tool</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">// Note</div>
+        <div class="blurb-text" style="font-size:12px; color:var(--text-dim);">
+This playlist is 90% Radioactive on repeat.
+I don't want to talk about it.
+<em>It helps.</em>
+That's all.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== COMMENTS TAB ===================== -->
+<div id="tab-comments" class="page-content">
+  <div style="max-width:680px;">
+    <div class="card">
+      <div class="card-title">// Comments (7)</div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">sable_k</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body">you showed up at my door at midnight with food without me saying anything was wrong. how did you know</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">nova_r</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body"><em>I could tell.</em></div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ro_v</div><div class="post-date">5 days ago</div></div>
+        <div class="post-body">answer your phone for once in your life</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">nova_r</div><div class="post-date">5 days ago</div></div>
+        <div class="post-body">I was on shift.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ro_v</div><div class="post-date">5 days ago</div></div>
+        <div class="post-body">you're ALWAYS on shift</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">cass_r</div><div class="post-date">last week</div></div>
+        <div class="post-body">hey I got a 94 on my chem exam!! told you I'd do it. you still owe me dinner</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">nova_r</div><div class="post-date">last week</div></div>
+        <div class="post-body">I know. I'm proud of you. Pick the place.
+
+<em>(don't pick anywhere that requires me to wear something nice)</em></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-close">[CLOSE]</div>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const photos = [
+    "https://i.pinimg.com/736x/0b/b4/27/0bb4276409fb777fb0a606a6a5373c59.jpg",
+    "https://i.pinimg.com/736x/0d/56/43/0d5643f0ae3ccb1cd3e6e95fed1f3900.jpg",
+    "https://i.pinimg.com/736x/3a/86/7e/3a867ec940e40300a2d3e7447e75b7c8.jpg",
+    "https://i.pinimg.com/736x/3c/53/46/3c53462a16c24efd7e9b376175d19465.jpg",
+    "https://i.pinimg.com/736x/47/44/18/47441800e05921552c398b4d6e18ecbe.jpg",
+    "https://i.pinimg.com/736x/4b/4e/cd/4b4ecd0875b37e59ce5a11dd9ae482b6.jpg",
+    "https://i.pinimg.com/736x/54/b2/92/54b2925d15ba9ee731a935d0e656ba3d.jpg",
+    "https://i.pinimg.com/736x/5b/97/99/5b97990a902f797373c1d04473a04242.jpg",
+    "https://i.pinimg.com/736x/65/44/f2/6544f26615fd87f25c8872dbf8da2776.jpg",
+    "https://i.pinimg.com/736x/6a/be/cb/6abecbfe43f1c0a323d492628d17682d.jpg",
+    "https://i.pinimg.com/736x/7a/3f/27/7a3f278fabb927b7d989ed2db8c2d421.jpg",
+    "https://i.pinimg.com/736x/7b/00/74/7b0074b92eaeb59dcd3391bc16c592a0.jpg",
+    "https://i.pinimg.com/736x/8d/f6/d3/8df6d371417c24eb90f82565348cf90d.jpg",
+    "https://i.pinimg.com/736x/b6/1f/9d/b61f9deeecab74f8511c8d6dc9e349d0.jpg",
+    "https://i.pinimg.com/736x/b6/80/d7/b680d7c34503834a5dc0edfcc85ca17f.jpg",
+    "https://i.pinimg.com/736x/c4/95/2e/c4952e6ec0e5eb07cf73337f5f5d2728.jpg",
+    "https://i.pinimg.com/736x/ce/f1/54/cef1549b7cb2461ec7203d777bffd0e9.jpg",
+    "https://i.pinimg.com/736x/d4/c2/0a/d4c20a058b22c252252a4d6b6dd299ee.jpg",
+    "https://i.pinimg.com/736x/e4/8c/d5/e48cd5bf28a54bf46f77346439b7e572.jpg",
+    "https://i.pinimg.com/736x/e8/a1/c6/e8a1c6e3ae203eb2054bf3260abab523.jpg"
+  ];
+
+  const grid = document.getElementById('photoGrid');
+  photos.forEach(src => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    const img = document.createElement('img');
+    img.src = src; img.alt = '';
+    img.onclick = () => openLightbox(src);
+    div.appendChild(img);
+    grid.appendChild(div);
+  });
+
+  function showTab(name, btn) {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+</script>
+</body>
+</html>
