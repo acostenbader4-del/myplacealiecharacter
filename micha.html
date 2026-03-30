@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>micha_harper // Myplace</title>
+<title>micha_harper // myPlace</title>
 <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Lato:ital,wght@0,300;0,400;1,300&family=Courier+Prime:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -444,13 +444,29 @@
   /* ANIMATIONS */
   .page-content.active { animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+
+  .friend-avatar-placeholder {
+    width: 70px; height: 70px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 4px;
+    font-family: 'Special Elite', cursive;
+    font-size: 20px;
+    color: var(--accent);
+    transition: all 0.2s;
+  }
+  .friend-item:hover .friend-avatar-placeholder {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
 </style>
 </head>
 <body>
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <a class="topbar-logo" href="#"><span>my</span>space_</a>
+  <a class="topbar-logo" href="#"><span>my</span>Place</a>
   <nav class="topbar-nav">
     <a href="#">home</a>
     <a href="#">search</a>
@@ -470,7 +486,6 @@
       <div class="profile-stats-row">
         <div class="stat-item"><span class="stat-num">312</span><span class="stat-label">friends</span></div>
         <div class="stat-item"><span class="stat-num">47</span><span class="stat-label">playlists</span></div>
-        <div class="stat-item"><span class="stat-num">12</span><span class="stat-label">blog posts</span></div>
         <div class="stat-item"><span class="stat-num">5★</span><span class="stat-label">unsent</span></div>
       </div>
       <div class="profile-online"><div class="online-dot"></div>online now</div>
@@ -489,7 +504,6 @@
 <div class="tabs-bar">
   <button class="tab-btn active" onclick="showTab('profile')">Profile</button>
   <button class="tab-btn" onclick="showTab('photos')">Photos</button>
-  <button class="tab-btn" onclick="showTab('blog')">Blog</button>
   <button class="tab-btn" onclick="showTab('music')">Music</button>
   <button class="tab-btn" onclick="showTab('comments')">Comments</button>
 </div>
@@ -527,28 +541,34 @@
         <div class="card-title">Top Friends</div>
         <div class="friends-grid">
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/82/35/4f/82354f9a92d3009d783e0002ff2aa16b.jpg" alt="">
-            <div class="friend-name">andrew</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">andrew
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/63/41/fa/6341faaabd5cffdb7ce752503a8de2b3.jpg" alt="">
-            <div class="friend-name">elliot</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">elliot
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/af/7b/9f/af7b9fd3e91c4b9f8dba1fc95e958bd0.jpg" alt="">
-            <div class="friend-name">sam</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">sam
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/9d/c6/f8/9dc6f86b98297302117f58e324a35a12.jpg" alt="">
-            <div class="friend-name">whoever</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">whoever
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/b5/49/79/b54979116b01592c026fc385daad6f2d.jpg" alt="">
-            <div class="friend-name">nobody</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">nobody
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/de/df/c3/dedfc34e4b64e244200d84490f3d8651.jpg" alt="">
-            <div class="friend-name">knows</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">knows
+          </div>
           </div>
         </div>
       </div>
@@ -625,57 +645,7 @@ i just haven't figured out the part where i stand up yet.</div>
   </div>
 </div>
 
-<!-- ===================== BLOG TAB ===================== -->
-<div id="tab-blog" class="page-content">
-  <div style="max-width: 700px;">
 
-    <div class="blog-entry">
-      <div class="blog-title">things I almost said (a partial list)</div>
-      <div class="blog-meta">posted: 3 days ago &nbsp;·&nbsp; category: personal &nbsp;·&nbsp; views: 4</div>
-      <div class="blog-body">1. "you were really something up there tonight."
-2. "i made a playlist for you. don't ask me how many hours."
-3. "i keep coming back here and it's not for the drinks."
-4. [deleted]
-5. "i think i've been watching you the way people watch something they know will change them."
-6. [also deleted]
-
-i turned all of them into something that sounded like a compliment about the show and then went home.
-
-<em>it's fine.</em></div>
-    </div>
-
-    <div class="blog-entry">
-      <div class="blog-title">on working at a record store and what that actually means</div>
-      <div class="blog-meta">posted: 2 weeks ago &nbsp;·&nbsp; category: life &nbsp;·&nbsp; views: 11</div>
-      <div class="blog-body">people come in looking for something and they don't know what it is yet. that's the job, kind of. not recommending — <em>translating.</em>
-
-someone says "I want something that sounds like falling asleep in the backseat of a car" and I hand them something and they look at me like I read their mind.
-
-I didn't. I just recognized myself in the description.
-
-I've been working on a playlist called "for andrew (version 5)" and I keep adding to it and then removing things and it's starting to feel less like a gift and more like a document. a record of something I won't say out loud.
-
-the vinyl doesn't judge. that's why I keep coming back.</div>
-    </div>
-
-    <div class="blog-entry">
-      <div class="blog-title">draft: something I wrote at 2am and didn't delete</div>
-      <div class="blog-meta">posted: last month &nbsp;·&nbsp; category: lyrics/something &nbsp;·&nbsp; views: 2</div>
-      <div class="blog-body">I keep practicing introductions
-in mirrors that don't talk back.
-I keep reducing you to something
-I can carry in my coat pocket.
-
-that's not fair. I know that.
-you're an entire person
-and I've been treating you
-like a song I'm afraid to learn the words to.
-
-(don't read into this. this is fiction. I'm fine.)</div>
-    </div>
-
-  </div>
-</div>
 
 <!-- ===================== MUSIC TAB ===================== -->
 <div id="tab-music" class="page-content">
