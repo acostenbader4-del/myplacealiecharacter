@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>micha_harper // Myplace</title>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Lato:ital,wght@0,300;0,400;1,300&family=Courier+Prime:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e12;
+    --bg2: #14141a;
+    --bg3: #1a1a24;
+    --border: #2a2a3a;
+    --accent: #7a6fa8;
+    --accent2: #a89fd8;
+    --text: #c8c4d8;
+    --text-dim: #6a6880;
+    --text-bright: #e8e4f4;
+    --gold: #c4a882;
+    --red: #8a4a5a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(122,111,168,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(122,111,168,0.03) 0%, transparent 50%);
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .topbar-logo {
+    font-family: 'Special Elite', cursive;
+    font-size: 20px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-decoration: none;
+  }
+  .topbar-logo span { color: var(--gold); }
+  .topbar-nav { display: flex; gap: 20px; align-items: center; }
+  .topbar-nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .topbar-nav a:hover { color: var(--text-bright); }
+  .hub-link {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 5px 12px;
+    border-radius: 2px;
+    font-size: 11px !important;
+  }
+
+  /* PROFILE HEADER */
+  .profile-header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .profile-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 30px,
+      rgba(255,255,255,0.005) 30px, rgba(255,255,255,0.005) 31px
+    );
+    pointer-events: none;
+  }
+  .profile-main-row {
+    display: flex;
+    gap: 28px;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+  }
+  .profile-avatar {
+    width: 120px;
+    height: 120px;
+    border: 2px solid var(--border);
+    object-fit: cover;
+    flex-shrink: 0;
+    filter: sepia(0.2) brightness(0.9);
+    transition: filter 0.3s;
+  }
+  .profile-avatar:hover { filter: sepia(0) brightness(1); }
+
+  .profile-identity { flex: 1; padding-bottom: 16px; }
+  .profile-display-name {
+    font-family: 'Special Elite', cursive;
+    font-size: 28px;
+    color: var(--text-bright);
+    letter-spacing: 1px;
+  }
+  .profile-handle {
+    color: var(--text-dim);
+    font-size: 13px;
+    margin-top: 2px;
+    font-style: italic;
+  }
+  .profile-tagline {
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px;
+    color: var(--accent2);
+    margin-top: 10px;
+    font-style: italic;
+    opacity: 0.8;
+    max-width: 420px;
+  }
+  .profile-stats-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 14px;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Special Elite', cursive;
+    font-size: 18px;
+    color: var(--gold);
+    display: block;
+  }
+  .stat-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .profile-online {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-dim);
+    font-size: 11px;
+    margin-top: 12px;
+  }
+  .online-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #5a8a6a;
+    box-shadow: 0 0 6px #5a8a6a;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* SONG BADGE */
+  .song-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    margin-top: 12px;
+    width: fit-content;
+    margin-bottom: -1px;
+  }
+  .song-badge-label { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+  .song-badge-title { font-size: 13px; color: var(--accent2); font-family: 'Courier Prime', monospace; }
+  .song-note { font-size: 18px; animation: bounce 1.2s infinite alternate; }
+  @keyframes bounce { from{transform:translateY(0)} to{transform:translateY(-3px)} }
+
+  /* TABS */
+  .tabs-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    position: sticky;
+    top: 44px;
+    z-index: 90;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-dim);
+    font-family: 'Lato', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active {
+    color: var(--accent2);
+    border-bottom-color: var(--accent2);
+  }
+
+  /* LAYOUT */
+  .page-content { display: none; padding: 32px 40px; }
+  .page-content.active { display: block; }
+
+  .two-col { display: grid; grid-template-columns: 260px 1fr; gap: 24px; }
+
+  /* CARDS */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: 'Special Elite', cursive;
+    font-size: 13px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ABOUT SECTION */
+  .about-field { margin-bottom: 12px; }
+  .about-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    margin-bottom: 3px;
+  }
+  .about-value {
+    font-size: 13px;
+    color: var(--text);
+    font-family: 'Courier Prime', monospace;
+  }
+  .about-value.highlight { color: var(--accent2); }
+
+  /* BLURB */
+  .blurb-text {
+    font-size: 13px;
+    line-height: 1.8;
+    color: var(--text);
+    font-family: 'Courier Prime', monospace;
+    font-style: italic;
+    white-space: pre-line;
+  }
+
+  /* MOOD BAR */
+  .mood-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'Courier Prime', monospace;
+  }
+  .mood-bar em { color: var(--text); font-style: italic; }
+
+  /* PHOTO GRID */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .photo-item {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    position: relative;
+  }
+  .photo-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: sepia(0.15) brightness(0.85);
+    transition: all 0.3s;
+  }
+  .photo-item:hover img { filter: sepia(0) brightness(1); transform: scale(1.04); }
+  .photo-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(14,14,18,0.4) 0%, transparent 50%);
+  }
+
+  /* FRIENDS GRID */
+  .friends-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .friend-item { text-align: center; cursor: pointer; }
+  .friend-item img {
+    width: 70px; height: 70px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    filter: sepia(0.2) brightness(0.85);
+    transition: all 0.2s;
+    display: block;
+    margin: 0 auto 4px;
+  }
+  .friend-item:hover img { filter: none; border-color: var(--accent); }
+  .friend-name { font-size: 10px; color: var(--text-dim); }
+
+  /* COMMENTS / POSTS */
+  .post-item {
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+  }
+  .post-item:last-child { border-bottom: none; }
+  .post-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+  .post-author { font-family: 'Special Elite', cursive; font-size: 14px; color: var(--accent2); }
+  .post-date { font-size: 10px; color: var(--text-dim); font-family: 'Courier Prime', monospace; }
+  .post-body { font-size: 13px; line-height: 1.7; color: var(--text); font-family: 'Courier Prime', monospace; }
+  .post-body em { color: var(--accent2); font-style: italic; }
+
+  /* BLOG */
+  .blog-entry { margin-bottom: 28px; }
+  .blog-title {
+    font-family: 'Special Elite', cursive;
+    font-size: 17px;
+    color: var(--text-bright);
+    margin-bottom: 6px;
+  }
+  .blog-meta {
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'Courier Prime', monospace;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .blog-body {
+    font-size: 13px;
+    line-height: 1.85;
+    color: var(--text);
+    font-style: italic;
+    font-family: 'Courier Prime', monospace;
+    white-space: pre-line;
+  }
+  .blog-body em { color: var(--accent2); font-style: normal; }
+
+  /* INTERESTS */
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'Courier Prime', monospace;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--text); }
+
+  /* PLAYLIST */
+  .playlist-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Courier Prime', monospace;
+    font-size: 12px;
+  }
+  .playlist-num { color: var(--text-dim); width: 20px; text-align: right; }
+  .playlist-info { flex: 1; }
+  .playlist-song { color: var(--text); }
+  .playlist-artist { color: var(--text-dim); font-size: 11px; }
+  .playlist-hidden { color: var(--red); font-size: 10px; font-style: italic; }
+
+  /* CONTACT TABLE */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .contact-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'Courier Prime', monospace;
+    letter-spacing: 0.5px;
+  }
+  .contact-btn:hover { border-color: var(--accent); color: var(--text); background: var(--bg2); }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.9);
+    z-index: 999;
+    align-items: center;
+    justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lightbox-close {
+    position: absolute; top: 20px; right: 28px;
+    font-size: 30px; color: var(--text-dim); cursor: pointer;
+    font-family: 'Special Elite', cursive;
+  }
+  .lightbox-close:hover { color: var(--text-bright); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ANIMATIONS */
+  .page-content.active { animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="#"><span>my</span>space_</a>
+  <nav class="topbar-nav">
+    <a href="#">home</a>
+    <a href="#">search</a>
+    <a href="#">music</a>
+    <a href="hub.html" class="hub-link">◂ hub</a>
+  </nav>
+</div>
+
+<!-- PROFILE HEADER -->
+<div class="profile-header">
+  <div class="profile-main-row">
+    <img class="profile-avatar" src="https://i.pinimg.com/736x/0e/b6/24/0eb62427a1a9373f1eec228e0513d040.jpg" alt="Micha Harper">
+    <div class="profile-identity">
+      <div class="profile-display-name">Micha Harper</div>
+      <div class="profile-handle">@ micha_h &nbsp;·&nbsp; 23 &nbsp;·&nbsp; they/them</div>
+      <div class="profile-tagline">"still watching from the same seat. still not introducing myself."</div>
+      <div class="profile-stats-row">
+        <div class="stat-item"><span class="stat-num">312</span><span class="stat-label">friends</span></div>
+        <div class="stat-item"><span class="stat-num">47</span><span class="stat-label">playlists</span></div>
+        <div class="stat-item"><span class="stat-num">12</span><span class="stat-label">blog posts</span></div>
+        <div class="stat-item"><span class="stat-num">5★</span><span class="stat-label">unsent</span></div>
+      </div>
+      <div class="profile-online"><div class="online-dot"></div>online now</div>
+      <div class="song-badge">
+        <span class="song-note">♪</span>
+        <div>
+          <div class="song-badge-label">listening to</div>
+          <div class="song-badge-title">Andrew in Drag — The Magnetic Fields</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('profile')">Profile</button>
+  <button class="tab-btn" onclick="showTab('photos')">Photos</button>
+  <button class="tab-btn" onclick="showTab('blog')">Blog</button>
+  <button class="tab-btn" onclick="showTab('music')">Music</button>
+  <button class="tab-btn" onclick="showTab('comments')">Comments</button>
+</div>
+
+<!-- ===================== PROFILE TAB ===================== -->
+<div id="tab-profile" class="page-content active">
+  <div class="two-col">
+    <!-- LEFT COL -->
+    <div>
+      <div class="mood-bar">mood: <em>&nbsp;thinking too loud, typing too quiet.</em></div>
+
+      <div class="card">
+        <div class="card-title">About Me</div>
+        <div class="about-field"><div class="about-label">age</div><div class="about-value">23</div></div>
+        <div class="about-field"><div class="about-label">location</div><div class="about-value">somewhere with a good view of the stage</div></div>
+        <div class="about-field"><div class="about-label">status</div><div class="about-value highlight">in love. won't say with who.</div></div>
+        <div class="about-field"><div class="about-label">job</div><div class="about-value">record store / bookstore</div></div>
+        <div class="about-field"><div class="about-label">body type</div><div class="about-value">average. slightly lanky.</div></div>
+        <div class="about-field"><div class="about-label">eyes</div><div class="about-value">hazel (depends on the light)</div></div>
+        <div class="about-field"><div class="about-label">sign</div><div class="about-value">probably a virgo honestly</div></div>
+        <div class="about-field"><div class="about-label">here for</div><div class="about-value highlight">watching. listening. not speaking.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Contact</div>
+        <div class="contact-grid">
+          <div class="contact-btn">✉ message</div>
+          <div class="contact-btn">+ add friend</div>
+          <div class="contact-btn">♡ add fav</div>
+          <div class="contact-btn">⚑ block</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Top Friends</div>
+        <div class="friends-grid">
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/82/35/4f/82354f9a92d3009d783e0002ff2aa16b.jpg" alt="">
+            <div class="friend-name">andrew</div>
+          </div>
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/63/41/fa/6341faaabd5cffdb7ce752503a8de2b3.jpg" alt="">
+            <div class="friend-name">elliot</div>
+          </div>
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/af/7b/9f/af7b9fd3e91c4b9f8dba1fc95e958bd0.jpg" alt="">
+            <div class="friend-name">sam</div>
+          </div>
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/9d/c6/f8/9dc6f86b98297302117f58e324a35a12.jpg" alt="">
+            <div class="friend-name">whoever</div>
+          </div>
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/b5/49/79/b54979116b01592c026fc385daad6f2d.jpg" alt="">
+            <div class="friend-name">nobody</div>
+          </div>
+          <div class="friend-item">
+            <img src="https://i.pinimg.com/736x/de/df/c3/dedfc34e4b64e244200d84490f3d8651.jpg" alt="">
+            <div class="friend-name">knows</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COL -->
+    <div>
+      <div class="card">
+        <div class="card-title">About Me (in their own words)</div>
+        <div class="blurb-text">i work at a record store.
+i have opinions about everything and share them with nobody.
+
+i have a favorite seat at the bar where i can see the stage without being seen. i've sat there a lot this year. it's fine. it means nothing.
+
+i make playlists the way other people write letters. obsessively specific, completely undelivered. if you're on one, you'll never know. that's the point, maybe.
+
+started writing lyrics once. gave up. started again. still haven't shown anyone.
+
+i googled "what is drag" one night like i didn't already know the answer. the answer was: complicated. the answer was: <em>oh.</em>
+
+my crooked smile shows up at the wrong times and i've given up apologizing for it.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Who I'd Like To Meet</div>
+        <div class="blurb-text">someone who doesn't make me feel like an observer of my own life.
+
+honestly? the person i'm already watching from across the room.
+i just haven't figured out the part where i stand up yet.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Interests</div>
+        <div class="tag-cloud">
+          <div class="tag">vinyl</div>
+          <div class="tag">drag shows</div>
+          <div class="tag">indie folk</div>
+          <div class="tag">half-finished essays</div>
+          <div class="tag">sad playlists</div>
+          <div class="tag">bookstores</div>
+          <div class="tag">2am thinking</div>
+          <div class="tag">the magnetic fields</div>
+          <div class="tag">hyperspecific playlists</div>
+          <div class="tag">worn jackets</div>
+          <div class="tag">watching</div>
+          <div class="tag">not saying things</div>
+          <div class="tag">irony as armor</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">General Info</div>
+        <div style="font-family:'Courier Prime',monospace; font-size:12px; line-height:2; color:var(--text-dim);">
+          <span style="color:var(--text);">Hometown:</span> somewhere he stays but doesn't feel seen<br>
+          <span style="color:var(--text);">Hair:</span> light brown. tried, gave up halfway<br>
+          <span style="color:var(--text);">Height:</span> 5'10"<br>
+          <span style="color:var(--text);">Ethnicity:</span> Italian-American<br>
+          <span style="color:var(--text);">Smoke / Drink:</span> occasionally / yes (at the bar. same seat.)<br>
+          <span style="color:var(--text);">Education:</span> bachelor's in something that didn't stick<br>
+          <span style="color:var(--text);">Income:</span> record store wages<br>
+          <span style="color:var(--text);">Orientation:</span> complicated<br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHOTOS TAB ===================== -->
+<div id="tab-photos" class="page-content">
+  <div class="card">
+    <div class="card-title">Photos — micha_h's album</div>
+    <div style="font-size:11px; color:var(--text-dim); margin-bottom:14px; font-family:'Courier Prime',monospace;">20 photos &nbsp;·&nbsp; most are accidental. posted anyway.</div>
+    <div class="photo-grid" id="photoGrid"></div>
+  </div>
+</div>
+
+<!-- ===================== BLOG TAB ===================== -->
+<div id="tab-blog" class="page-content">
+  <div style="max-width: 700px;">
+
+    <div class="blog-entry">
+      <div class="blog-title">things I almost said (a partial list)</div>
+      <div class="blog-meta">posted: 3 days ago &nbsp;·&nbsp; category: personal &nbsp;·&nbsp; views: 4</div>
+      <div class="blog-body">1. "you were really something up there tonight."
+2. "i made a playlist for you. don't ask me how many hours."
+3. "i keep coming back here and it's not for the drinks."
+4. [deleted]
+5. "i think i've been watching you the way people watch something they know will change them."
+6. [also deleted]
+
+i turned all of them into something that sounded like a compliment about the show and then went home.
+
+<em>it's fine.</em></div>
+    </div>
+
+    <div class="blog-entry">
+      <div class="blog-title">on working at a record store and what that actually means</div>
+      <div class="blog-meta">posted: 2 weeks ago &nbsp;·&nbsp; category: life &nbsp;·&nbsp; views: 11</div>
+      <div class="blog-body">people come in looking for something and they don't know what it is yet. that's the job, kind of. not recommending — <em>translating.</em>
+
+someone says "I want something that sounds like falling asleep in the backseat of a car" and I hand them something and they look at me like I read their mind.
+
+I didn't. I just recognized myself in the description.
+
+I've been working on a playlist called "for andrew (version 5)" and I keep adding to it and then removing things and it's starting to feel less like a gift and more like a document. a record of something I won't say out loud.
+
+the vinyl doesn't judge. that's why I keep coming back.</div>
+    </div>
+
+    <div class="blog-entry">
+      <div class="blog-title">draft: something I wrote at 2am and didn't delete</div>
+      <div class="blog-meta">posted: last month &nbsp;·&nbsp; category: lyrics/something &nbsp;·&nbsp; views: 2</div>
+      <div class="blog-body">I keep practicing introductions
+in mirrors that don't talk back.
+I keep reducing you to something
+I can carry in my coat pocket.
+
+that's not fair. I know that.
+you're an entire person
+and I've been treating you
+like a song I'm afraid to learn the words to.
+
+(don't read into this. this is fiction. I'm fine.)</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===================== MUSIC TAB ===================== -->
+<div id="tab-music" class="page-content">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-title">Current Rotation</div>
+        <div class="playlist-item"><div class="playlist-num">1</div><div class="playlist-info"><div class="playlist-song">Andrew in Drag</div><div class="playlist-artist">The Magnetic Fields</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">2</div><div class="playlist-info"><div class="playlist-song">I Don't Want to Get Over You</div><div class="playlist-artist">The Magnetic Fields</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">3</div><div class="playlist-info"><div class="playlist-song">The Book of Love</div><div class="playlist-artist">The Magnetic Fields</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">4</div><div class="playlist-info"><div class="playlist-song">Lua</div><div class="playlist-artist">Bright Eyes</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">5</div><div class="playlist-info"><div class="playlist-song">Casimir Pulaski Day</div><div class="playlist-artist">Sufjan Stevens</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">6</div><div class="playlist-info"><div class="playlist-song">Skinny Love</div><div class="playlist-artist">Bon Iver</div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">Playlists (partial list)</div>
+        <div class="playlist-item"><div class="playlist-info"><div class="playlist-song">for andrew (version 1)</div><div class="playlist-artist">22 songs &nbsp;<span class="playlist-hidden">private · never shared</span></div></div></div>
+        <div class="playlist-item"><div class="playlist-info"><div class="playlist-song">for andrew (version 2)</div><div class="playlist-artist">31 songs &nbsp;<span class="playlist-hidden">private · never shared</span></div></div></div>
+        <div class="playlist-item"><div class="playlist-info"><div class="playlist-song">for andrew (version 3)</div><div class="playlist-artist">18 songs &nbsp;<span class="playlist-hidden">private · never shared</span></div></div></div>
+        <div class="playlist-item"><div class="playlist-info"><div class="playlist-song">for andrew (version 4)</div><div class="playlist-artist">27 songs &nbsp;<span class="playlist-hidden">private · never shared</span></div></div></div>
+        <div class="playlist-item"><div class="playlist-info"><div class="playlist-song">for andrew (version 5)</div><div class="playlist-artist">in progress &nbsp;<span class="playlist-hidden">private · never shared</span></div></div></div>
+        <div class="playlist-item"><div class="playlist-info"><div class="playlist-song">songs for looking out windows</div><div class="playlist-artist">14 songs &nbsp;·&nbsp; public</div></div></div>
+        <div class="playlist-item"><div class="playlist-info"><div class="playlist-song">things I wanted to say</div><div class="playlist-artist">9 songs &nbsp;<span class="playlist-hidden">private</span></div></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Favorite Artists</div>
+        <div class="tag-cloud">
+          <div class="tag">The Magnetic Fields</div>
+          <div class="tag">Bright Eyes</div>
+          <div class="tag">Sufjan Stevens</div>
+          <div class="tag">Bon Iver</div>
+          <div class="tag">The National</div>
+          <div class="tag">Elliott Smith</div>
+          <div class="tag">Joanna Newsom</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== COMMENTS TAB ===================== -->
+<div id="tab-comments" class="page-content">
+  <div style="max-width: 680px;">
+    <div class="card">
+      <div class="card-title">Comments (8)</div>
+
+      <div class="post-item">
+        <div class="post-meta">
+          <div class="post-author">elliot_s</div>
+          <div class="post-date">2 days ago</div>
+        </div>
+        <div class="post-body">dude you were standing literally right next to the stage last night and I KNOW you saw him. why didn't you say anything</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta">
+          <div class="post-author">micha_h</div>
+          <div class="post-date">2 days ago</div>
+        </div>
+        <div class="post-body"><em>I don't know what you're talking about</em></div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta">
+          <div class="post-author">elliot_s</div>
+          <div class="post-date">2 days ago</div>
+        </div>
+        <div class="post-body">YOU LITERALLY LAUGHED AT HIS JOKE AND THEN LOOKED AT YOUR FEET</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta">
+          <div class="post-author">sam_c</div>
+          <div class="post-date">4 days ago</div>
+        </div>
+        <div class="post-body">hey can I borrow that record you mentioned? the magnetic fields one. you talked about it for like 20 minutes last week</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta">
+          <div class="post-author">micha_h</div>
+          <div class="post-date">4 days ago</div>
+        </div>
+        <div class="post-body">yeah. it's— yeah. I'll bring it Thursday.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta">
+          <div class="post-author">andrew_★</div>
+          <div class="post-date">last week</div>
+        </div>
+        <div class="post-body">hey I think I saw you at the bar last Friday?? always in that same back corner lol. cool jacket btw</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta">
+          <div class="post-author">micha_h</div>
+          <div class="post-date">last week</div>
+        </div>
+        <div class="post-body"><em>thanks. good show.</em>
+
+[edited 4 times before posting]</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-close">✕</div>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const photos = [
+    "https://i.pinimg.com/736x/0e/b6/24/0eb62427a1a9373f1eec228e0513d040.jpg",
+    "https://i.pinimg.com/736x/2a/18/64/2a186414d90bd2e1bb3a67066aeaee9a.jpg",
+    "https://i.pinimg.com/736x/36/69/41/3669411ed477703aeb74ee6574090315.jpg",
+    "https://i.pinimg.com/736x/38/d3/d7/38d3d785ecbde480578e58660aa4f887.jpg",
+    "https://i.pinimg.com/736x/45/7c/70/457c70d0bf44015bd66308e141bbdfba.jpg",
+    "https://i.pinimg.com/736x/53/7f/84/537f844de4da91e32479113bc6dd81f8.jpg",
+    "https://i.pinimg.com/736x/5e/e1/ce/5ee1ce5c05df2e4c4f923f3524747316.jpg",
+    "https://i.pinimg.com/736x/63/41/fa/6341faaabd5cffdb7ce752503a8de2b3.jpg",
+    "https://i.pinimg.com/736x/82/35/4f/82354f9a92d3009d783e0002ff2aa16b.jpg",
+    "https://i.pinimg.com/736x/9d/c6/f8/9dc6f86b98297302117f58e324a35a12.jpg",
+    "https://i.pinimg.com/736x/af/7b/9f/af7b9fd3e91c4b9f8dba1fc95e958bd0.jpg",
+    "https://i.pinimg.com/736x/b5/49/79/b54979116b01592c026fc385daad6f2d.jpg",
+    "https://i.pinimg.com/736x/be/51/9c/be519ceb6d6ff8930316461941bd93eb.jpg",
+    "https://i.pinimg.com/736x/c0/0a/72/c00a72e5c5ce020f68f9e2a541829e0a.jpg",
+    "https://i.pinimg.com/736x/cf/05/cc/cf05cced06d8af2c71c72e1aed9ba21a.jpg",
+    "https://i.pinimg.com/736x/de/df/c3/dedfc34e4b64e244200d84490f3d8651.jpg",
+    "https://i.pinimg.com/736x/e6/3a/f5/e63af5121e3829388d76439ed9060572.jpg",
+    "https://i.pinimg.com/736x/e6/d9/cd/e6d9cdf388031f906ea21dd9899b721d.jpg",
+    "https://i.pinimg.com/736x/e9/a5/e5/e9a5e5796ce723ad9b375a7700fcab5c.jpg",
+    "https://i.pinimg.com/736x/f7/a6/f0/f7a6f03e9d6bccb91bd111f3e465b839.jpg"
+  ];
+
+  const grid = document.getElementById('photoGrid');
+  photos.forEach(src => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    const img = document.createElement('img');
+    img.src = src; img.alt = '';
+    img.onclick = () => openLightbox(src);
+    div.appendChild(img);
+    grid.appendChild(div);
+  });
+
+  function showTab(name) {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+</script>
+</body>
+</html>
