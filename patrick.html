@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>patrick_c // myPlace</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #09090b;
+    --bg2: #0f0f12;
+    --bg3: #151518;
+    --border: #252528;
+    --border2: #333338;
+    --accent: #c0392b;
+    --accent2: #e05a4a;
+    --accent3: #f0a030;
+    --text: #c0bcc8;
+    --text-dim: #58565e;
+    --text-bright: #e8e4f0;
+    --gold: #c8a040;
+    --blue: #3a5a8a;
+    --blue2: #5a7aaa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 80% 10%, rgba(192,57,43,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 10% 90%, rgba(58,90,138,0.04) 0%, transparent 50%);
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 2px solid var(--accent);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+  .topbar-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--text-bright);
+    text-decoration: none;
+    letter-spacing: 4px;
+  }
+  .topbar-logo span { color: var(--accent2); }
+  .topbar-nav { display: flex; gap: 20px; align-items: center; }
+  .topbar-nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .topbar-nav a:hover { color: var(--text-bright); }
+  .hub-link {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 5px 12px;
+    font-size: 11px !important;
+  }
+
+  /* PROFILE HEADER */
+  .profile-header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent3) 50%, var(--accent) 100%);
+  }
+  .header-bg-text {
+    position: absolute;
+    bottom: -10px; right: -10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 160px;
+    color: rgba(192,57,43,0.04);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -5px;
+  }
+
+  .profile-main-row {
+    display: flex;
+    gap: 28px;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar-wrap { position: relative; flex-shrink: 0; }
+  .avatar-frame {
+    position: absolute; inset: 0;
+    border: 2px solid var(--accent);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .avatar-frame::before {
+    content: '';
+    position: absolute;
+    bottom: -8px; left: -8px; right: -8px;
+    height: 8px;
+    background: linear-gradient(to bottom, rgba(192,57,43,0.3), transparent);
+  }
+  .profile-avatar {
+    width: 120px; height: 120px;
+    object-fit: cover;
+    display: block;
+    filter: contrast(1.15) brightness(0.9) saturate(0.7);
+    transition: filter 0.3s;
+  }
+  .profile-avatar:hover { filter: contrast(1.05) brightness(1) saturate(0.9); }
+  .avatar-status {
+    position: absolute;
+    bottom: -12px; left: 0; right: 0;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 9px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    background: var(--bg2);
+    padding: 3px 0;
+    border-top: 2px solid var(--accent);
+  }
+
+  .profile-identity { flex: 1; padding-bottom: 18px; }
+  .id-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .profile-display-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--text-bright);
+    letter-spacing: 3px;
+    line-height: 1;
+  }
+  .profile-handle {
+    color: var(--accent2);
+    font-size: 13px;
+    margin-top: 4px;
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .profile-tagline {
+    font-family: 'Barlow', sans-serif;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    font-style: italic;
+    max-width: 460px;
+    line-height: 1.5;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 0;
+    margin-top: 16px;
+    border: 1px solid var(--border2);
+    width: fit-content;
+  }
+  .stat-item {
+    padding: 8px 20px;
+    border-right: 1px solid var(--border2);
+    text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--accent2);
+    display: block;
+    letter-spacing: 1px;
+  }
+  .stat-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+
+  .profile-online {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--text-dim); font-size: 11px; margin-top: 10px;
+    font-family: 'Barlow Condensed', sans-serif; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .online-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent2); box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .song-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-left: 4px solid var(--accent3);
+    padding: 8px 14px;
+    margin-top: 14px;
+    width: fit-content;
+    margin-bottom: -1px;
+  }
+  .song-badge-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; font-family: 'Barlow Condensed', sans-serif; }
+  .song-badge-title { font-size: 13px; color: var(--accent3); font-family: 'Barlow Condensed', sans-serif; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+  .song-note { font-size: 18px; color: var(--accent3); animation: pump 0.8s ease-in-out infinite alternate; }
+  @keyframes pump { from{transform:scale(1)} to{transform:scale(1.2)} }
+
+  /* TABS */
+  .tabs-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    position: sticky;
+    top: 44px;
+    z-index: 90;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-dim);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 13px 22px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent2); border-bottom-color: var(--accent); }
+
+  /* CONTENT */
+  .page-content { display: none; padding: 28px 40px; }
+  .page-content.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+  .two-col { display: grid; grid-template-columns: 260px 1fr; gap: 20px; }
+
+  /* CARD */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--border2);
+    padding: 18px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .card.red-top { border-top-color: var(--accent); }
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    color: var(--accent2);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 3px;
+  }
+
+  /* ABOUT */
+  .about-field { margin-bottom: 10px; display: flex; gap: 8px; align-items: baseline; }
+  .about-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    white-space: nowrap;
+    min-width: 76px;
+  }
+  .about-value {
+    font-size: 13px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+  }
+  .about-value.red { color: var(--accent2); }
+  .about-value.gold { color: var(--accent3); }
+
+  /* BLURB */
+  .blurb-text {
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    white-space: pre-line;
+  }
+  .blurb-text em { color: var(--accent2); font-style: normal; font-weight: 600; }
+  .blurb-text strong { color: var(--accent3); font-weight: 400; }
+
+  /* MOOD */
+  .mood-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+  .mood-bar em { color: var(--text); font-style: normal; }
+
+  /* KNUCKLE TATTOO */
+  .tattoo-display {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    padding: 12px 0 4px;
+  }
+  .knuckle {
+    width: 36px; height: 36px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--text-bright);
+    letter-spacing: 0;
+  }
+
+  /* FRIENDS */
+  .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .friend-item { text-align: center; cursor: pointer; }
+  .friend-item img {
+    width: 70px; height: 70px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    filter: contrast(1.1) saturate(0.6) brightness(0.8);
+    display: block; margin: 0 auto 4px;
+    transition: all 0.2s;
+  }
+  .friend-item:hover img { filter: contrast(1) saturate(0.85) brightness(1); border-color: var(--accent); }
+  .friend-name { font-size: 9px; color: var(--text-dim); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 1px; text-transform: uppercase; }
+
+  .friend-avatar-placeholder {
+    width: 70px; height: 70px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 4px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--accent);
+    transition: all 0.2s;
+  }
+  .friend-item:hover .friend-avatar-placeholder { border-color: var(--accent2); color: var(--accent2); }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .contact-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 9px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .contact-btn:hover { border-color: var(--accent); color: var(--accent2); }
+
+  /* TAGS */
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 3px 9px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: default;
+    transition: all 0.2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--text); }
+
+  /* PHOTOS */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 6px;
+  }
+  .photo-item {
+    aspect-ratio: 1; overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer; position: relative;
+  }
+  .photo-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1.15) saturate(0.6) brightness(0.85);
+    transition: all 0.3s;
+  }
+  .photo-item:hover img { filter: contrast(1.05) saturate(0.85) brightness(1); transform: scale(1.04); }
+  .photo-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(192,57,43,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  /* COMMENTS */
+  .post-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .post-item:last-child { border-bottom: none; }
+  .post-meta { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .post-author { font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: var(--accent2); letter-spacing: 2px; }
+  .post-date { font-size: 10px; color: var(--text-dim); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 1px; }
+  .post-body { font-size: 13px; line-height: 1.7; color: var(--text); font-family: 'Barlow', sans-serif; }
+  .post-body em { color: var(--accent3); font-style: italic; }
+
+  /* PLAYLIST */
+  .playlist-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    font-family: 'Barlow', sans-serif; font-size: 13px;
+  }
+  .playlist-num { color: var(--text-dim); width: 20px; text-align: right; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 600; }
+  .playlist-song { color: var(--text); }
+  .playlist-artist { color: var(--text-dim); font-size: 11px; }
+  .playlist-info { flex: 1; }
+  .playlist-note { font-size: 10px; color: var(--accent3); font-style: italic; }
+
+  /* MEMORIAL BOX */
+  .memorial-box {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-left: 4px solid var(--gold);
+    padding: 14px;
+    margin-bottom: 16px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+  .memorial-box .label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.95); z-index: 999;
+    align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lightbox-close {
+    position: absolute; top: 20px; right: 28px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; color: var(--text-dim); cursor: pointer;
+    letter-spacing: 3px;
+  }
+  .lightbox-close:hover { color: var(--text-bright); }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="#"><span>MY</span>PLACE</a>
+  <nav class="topbar-nav">
+    <a href="#">home</a>
+    <a href="#">search</a>
+    <a href="#">music</a>
+    <a href="hub.html" class="hub-link">◂ hub</a>
+  </nav>
+</div>
+
+<!-- PROFILE HEADER -->
+<div class="profile-header">
+  <div class="header-stripe"></div>
+  <div class="header-bg-text">STAY</div>
+
+  <div class="profile-main-row">
+    <div class="avatar-wrap">
+      <div class="avatar-frame"></div>
+      <img class="profile-avatar" src="https://i.pinimg.com/736x/0d/ec/74/0dec741738e1c7b75da11dc9434427cf.jpg" alt="Patrick Calison">
+      <div class="avatar-status">on call · always</div>
+    </div>
+    <div class="profile-identity">
+      <div class="id-tag">// profile · patrick_c · he/him</div>
+      <div class="profile-display-name">Patrick Calison</div>
+      <div class="profile-handle">@ patrick_c &nbsp;·&nbsp; 21 &nbsp;·&nbsp; he/him</div>
+      <div class="profile-tagline">"I made a rule after. never again. I mean it."</div>
+      <div class="stat-row">
+        <div class="stat-item"><span class="stat-num">203</span><span class="stat-label">friends</span></div>
+        <div class="stat-item"><span class="stat-num">∞</span><span class="stat-label">rides given</span></div>
+        <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">days off</span></div>
+        <div class="stat-item"><span class="stat-num">STAY</span><span class="stat-label">knuckles</span></div>
+      </div>
+      <div class="profile-online"><div class="online-dot"></div>online — probably already on his way somewhere</div>
+      <div class="song-badge">
+        <span class="song-note">♪</span>
+        <div>
+          <div class="song-badge-label">// blasting</div>
+          <div class="song-badge-title">Immortals — Fall Out Boy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('profile', this)">Profile</button>
+  <button class="tab-btn" onclick="showTab('photos', this)">Photos</button>
+  <button class="tab-btn" onclick="showTab('music', this)">Music</button>
+  <button class="tab-btn" onclick="showTab('comments', this)">Comments</button>
+</div>
+
+<!-- ===================== PROFILE TAB ===================== -->
+<div id="tab-profile" class="page-content active">
+  <div class="two-col">
+    <!-- LEFT -->
+    <div>
+      <div class="mood-bar">status: <em>&nbsp;you good? no really — you good?</em></div>
+
+      <div class="memorial-box">
+        <div class="label">In Memory</div>
+        Roman numerals on his chest. A date that matters.
+        He doesn't talk about it. He doesn't have to.
+        Everything he does is already about it.
+      </div>
+
+      <div class="card red-top">
+        <div class="card-title">About</div>
+        <div class="about-field"><div class="about-label">age</div><div class="about-value">21</div></div>
+        <div class="about-field"><div class="about-label">ethnicity</div><div class="about-value">Mixed — Black & White</div></div>
+        <div class="about-field"><div class="about-label">location</div><div class="about-value">wherever he's needed</div></div>
+        <div class="about-field"><div class="about-label">status</div><div class="about-value red">not a question right now</div></div>
+        <div class="about-field"><div class="about-label">eyes</div><div class="about-value">dark brown. almost black. grounding.</div></div>
+        <div class="about-field"><div class="about-label">height</div><div class="about-value">6'0"</div></div>
+        <div class="about-field"><div class="about-label">job</div><div class="about-value">mechanic / warehouse / whatever's needed</div></div>
+        <div class="about-field"><div class="about-label">record</div><div class="about-value gold">minor assault. always defending someone.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Tattoos</div>
+        <div class="tattoo-display">
+          <div class="knuckle">S</div>
+          <div class="knuckle">T</div>
+          <div class="knuckle">A</div>
+          <div class="knuckle">Y</div>
+        </div>
+        <div style="text-align:center; margin-top:8px; font-family:'Barlow',sans-serif; font-size:11px; color:var(--text-dim); font-style:italic;">
+          done after a breaking point. means what it says.
+        </div>
+        <div style="margin-top:12px; font-family:'Barlow',sans-serif; font-size:12px; color:var(--text-dim); line-height:1.8;">
+          <span style="color:var(--text);">Chest:</span> Roman numerals — a date. a loss.<br>
+          <span style="color:var(--text);">Arms/Hands:</span> multiple scars. one serious one on the side.<br>
+          <span style="color:var(--text);">Build:</span> muscular. built from doing, not working out.<br>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Contact</div>
+        <div class="contact-grid">
+          <div class="contact-btn">✉ message</div>
+          <div class="contact-btn">+ add</div>
+          <div class="contact-btn">📞 call</div>
+          <div class="contact-btn">⚑ report</div>
+        </div>
+        <div style="font-family:'Barlow',sans-serif; font-size:11px; color:var(--text-dim); margin-top:10px; font-style:italic; letter-spacing:0.5px;">
+          bad at texting. will show up in person instantly.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Top Network</div>
+        <div class="friends-grid">
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">sibling</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">dom</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">reese</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">marco</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">j.t.</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">★</div>
+            <div class="friend-name">[gone]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <div class="card red-top">
+        <div class="card-title">About Me</div>
+        <div class="blurb-text">I work with my hands. Mechanic, warehouse, security — whatever it is, I do it right.
+
+I check in on people. That's just how I am. Not a choice at this point, more of a reflex. If you seem off, I'm going to notice. If something goes wrong, I'm going to be there before you finish asking.
+
+I've been told I carry too much. I've been told I'm too intense. I've been told to take a break, slow down, let someone else handle it. I hear that. I don't know how to do it.
+
+There was a moment. I couldn't — I didn't make it in time. That's the short version and it's the only version I'm giving.
+
+After that I made a rule: <em>never again.</em>
+
+My little sibling is my whole world. Full stop.
+
+I eat three times what anyone else does and I still run thin. Don't ask. I don't know either.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Who I'd Like To Meet</div>
+        <div class="blurb-text">someone who doesn't need me to protect them from everything — but doesn't mind that I'm going to try anyway.
+
+someone who's real with me. I can carry a lot but I can't carry dishonesty.
+
+<em>someone who'll tell me to sit down and eat something before I go back out there.</em>
+
+someone my sibling approves of. that bar is non-negotiable.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Interests</div>
+        <div class="tag-cloud">
+          <div class="tag">Immortals (it's a promise)</div>
+          <div class="tag">mechanics</div>
+          <div class="tag">action movies</div>
+          <div class="tag">showing up</div>
+          <div class="tag">nicknames that stick</div>
+          <div class="tag">being the strong one</div>
+          <div class="tag">eating everything</div>
+          <div class="tag">community</div>
+          <div class="tag">loyalty</div>
+          <div class="tag">never again</div>
+          <div class="tag">dumb action films</div>
+          <div class="tag">grief as fuel</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">General</div>
+        <div style="font-family:'Barlow',sans-serif; font-size:13px; line-height:2.1; color:var(--text-dim);">
+          <span style="color:var(--text);">Hair:</span> black, short twists or curls. sometimes dyed at the tips.<br>
+          <span style="color:var(--text);">Walk:</span> confident. like he'll step in before something goes wrong.<br>
+          <span style="color:var(--text);">Laugh:</span> loud, sharp. doesn't come out as often as it used to.<br>
+          <span style="color:var(--text);">Sleep:</span> bad. insomnia. nightmares he won't describe.<br>
+          <span style="color:var(--text);">Injury:</span> ribs. flares up. he ignores it.<br>
+          <span style="color:var(--text);">Texting:</span> terrible at it. will appear in person.<br>
+          <span style="color:var(--text);">Nicknames:</span> gives everyone one. they always stick.<br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHOTOS TAB ===================== -->
+<div id="tab-photos" class="page-content">
+  <div class="card">
+    <div class="card-title">Photos — patrick_c</div>
+    <div style="font-size:11px; color:var(--text-dim); margin-bottom:14px; font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; text-transform:uppercase;">20 photos · most taken by someone else · he didn't notice</div>
+    <div class="photo-grid" id="photoGrid"></div>
+  </div>
+</div>
+
+<!-- ===================== MUSIC TAB ===================== -->
+<div id="tab-music" class="page-content">
+  <div class="two-col">
+    <div>
+      <div class="card red-top">
+        <div class="card-title">Current Rotation</div>
+        <div class="playlist-item"><div class="playlist-num">1</div><div class="playlist-info"><div class="playlist-song">Immortals</div><div class="playlist-artist">Fall Out Boy</div></div><div class="playlist-note">every single morning</div></div>
+        <div class="playlist-item"><div class="playlist-num">2</div><div class="playlist-info"><div class="playlist-song">Champion</div><div class="playlist-artist">Fall Out Boy</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">3</div><div class="playlist-info"><div class="playlist-song">My Songs Know What You Did in the Dark</div><div class="playlist-artist">Fall Out Boy</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">4</div><div class="playlist-info"><div class="playlist-song">Centuries</div><div class="playlist-artist">Fall Out Boy</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">5</div><div class="playlist-info"><div class="playlist-song">Uma Thurman</div><div class="playlist-artist">Fall Out Boy</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">6</div><div class="playlist-info"><div class="playlist-song">Shots</div><div class="playlist-artist">Imagine Dragons</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">7</div><div class="playlist-info"><div class="playlist-song">Warriors</div><div class="playlist-artist">Imagine Dragons</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">8</div><div class="playlist-info"><div class="playlist-song">Hall of Fame</div><div class="playlist-artist">The Script ft. will.i.am</div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">Favourite Artists</div>
+        <div class="tag-cloud">
+          <div class="tag">Fall Out Boy</div>
+          <div class="tag">Imagine Dragons</div>
+          <div class="tag">The Script</div>
+          <div class="tag">Kendrick Lamar</div>
+          <div class="tag">J. Cole</div>
+          <div class="tag">Jay-Z</div>
+          <div class="tag">Eminem</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">On Immortals</div>
+        <div class="blurb-text" style="font-size:13px; color:var(--text-dim);">
+He doesn't play it as a song.
+He plays it as a <em>commitment.</em>
+
+Every morning. Volume up. Like a promise he's making again.
+
+Nobody's asked him about it directly. They can tell it's not a conversation.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== COMMENTS TAB ===================== -->
+<div id="tab-comments" class="page-content">
+  <div style="max-width:680px;">
+    <div class="card">
+      <div class="card-title">Comments (9)</div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">dom_v</div><div class="post-date">yesterday</div></div>
+        <div class="post-body">you drove 45 minutes at 2am because I texted you "rough night." I hadn't even finished the sentence.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">patrick_c</div><div class="post-date">yesterday</div></div>
+        <div class="post-body">you were having a rough night.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">reese_m</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body">bro your ribs. you need to stop acting like that's not a thing</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">patrick_c</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body">it's fine.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">reese_m</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body">it is NOT fine I watched you wince loading the truck and then just keep going like a PERSON</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">marco_t</div><div class="post-date">last week</div></div>
+        <div class="post-body">you gave me a nickname the first day we met and I've never heard anyone call me anything else since. how do you DO that</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">patrick_c</div><div class="post-date">last week</div></div>
+        <div class="post-body"><em>it just fits. you know it fits.</em></div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">sibling_c</div><div class="post-date">2 weeks ago</div></div>
+        <div class="post-body">you literally sat outside my exam building for three hours in case I needed a ride. I told you not to. you did it anyway. I love you so much it's annoying</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">patrick_c</div><div class="post-date">2 weeks ago</div></div>
+        <div class="post-body">you passed. that's all that matters.
+
+<em>(I brought snacks. you didn't even ask about the snacks.)</em></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-close">CLOSE ✕</div>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const photos = [
+    "https://i.pinimg.com/736x/0d/ec/74/0dec741738e1c7b75da11dc9434427cf.jpg",
+    "https://i.pinimg.com/736x/19/35/e4/1935e4d4bdef7b4069406b611cb76216.jpg",
+    "https://i.pinimg.com/736x/23/64/6c/23646c94fc3b55ca567a17ba1becc203.jpg",
+    "https://i.pinimg.com/736x/32/20/7b/32207b8e7e3ff1485752ff1082ae633f.jpg",
+    "https://i.pinimg.com/736x/3f/11/2d/3f112db1d32d317c0e0c6b1b1be8a2af.jpg",
+    "https://i.pinimg.com/736x/43/c9/1a/43c91a7a8b895fecdf0aa701d7b6165c.jpg",
+    "https://i.pinimg.com/736x/46/b6/71/46b67141fdc47a105649a2fd89fa24ef.jpg",
+    "https://i.pinimg.com/736x/52/4b/08/524b08e3abf40bfcd306632dad99f7fd.jpg",
+    "https://i.pinimg.com/736x/6b/c5/be/6bc5be0fa9a7298147217bc04fd216f1.jpg",
+    "https://i.pinimg.com/736x/80/07/42/800742279060d421f8d61b7c40dc44ea.jpg",
+    "https://i.pinimg.com/736x/83/f8/d9/83f8d9eb5dff66521e3e2d11993c81ef.jpg",
+    "https://i.pinimg.com/736x/84/33/7f/84337f410af4a810f491e3abae05feab.jpg",
+    "https://i.pinimg.com/736x/99/82/40/99824031dcf6ef2d9d37f31f9c15e40c.jpg",
+    "https://i.pinimg.com/736x/a7/cc/1b/a7cc1b99915c8688f6e2ca540ba36237.jpg",
+    "https://i.pinimg.com/736x/cd/95/a6/cd95a6cd9fee2c527c387019bf1dafc3.jpg",
+    "https://i.pinimg.com/736x/dc/f6/5e/dcf65e54ba4c299097e8b2815b1a26d9.jpg",
+    "https://i.pinimg.com/736x/e2/d2/c5/e2d2c592c7c8d342d8c77c087628441c.jpg",
+    "https://i.pinimg.com/736x/e4/71/c5/e471c55c935fc251b80d714708e9fe50.jpg",
+    "https://i.pinimg.com/736x/e6/17/21/e61721f625933cfe4c851d9719c5714c.jpg",
+    "https://i.pinimg.com/736x/f7/54/6c/f7546ceeaa71b437f014d07eb5d5dac1.jpg"
+  ];
+
+  const grid = document.getElementById('photoGrid');
+  photos.forEach(src => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    const img = document.createElement('img');
+    img.src = src; img.alt = '';
+    img.onclick = () => openLightbox(src);
+    div.appendChild(img);
+    grid.appendChild(div);
+  });
+
+  function showTab(name, btn) {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+</script>
+</body>
+</html>
