@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>myPlace // connect. share. be.</title>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=VT323&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810;
+    --bg2: #0d0e1c;
+    --bg3: #131428;
+    --border: #1e2038;
+    --border2: #2a2d58;
+    --accent: #4a7fd4;
+    --accent2: #6a9fe4;
+    --pink: #c040a0;
+    --pink2: #e060c0;
+    --yellow: #d4b840;
+    --yellow2: #f0d050;
+    --green: #40b080;
+    --text: #b0b8d8;
+    --text-dim: #40486a;
+    --text-bright: #e0e8ff;
+    --red: #c04040;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    overflow-x: hidden;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(74,127,212,0.12) 0%, transparent 45%),
+      radial-gradient(ellipse at 80% 80%, rgba(192,64,160,0.1) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 50%, rgba(64,176,128,0.04) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='4' height='4' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.015)'/%3E%3C/svg%3E");
+    background-size: auto, auto, auto, 4px 4px;
+  }
+
+  /* ===================== MARQUEE ===================== */
+  .top-marquee {
+    background: linear-gradient(90deg, var(--accent), var(--pink), var(--yellow), var(--green), var(--accent));
+    background-size: 400% 100%;
+    animation: gradshift 8s linear infinite;
+    padding: 4px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  @keyframes gradshift { 0%{background-position:0% 0%} 100%{background-position:400% 0%} }
+  .top-marquee-inner {
+    display: inline-block;
+    animation: marquee 30s linear infinite;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: #fff;
+    letter-spacing: 3px;
+  }
+  @keyframes marquee { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
+
+  /* ===================== TOPBAR ===================== */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border2);
+    padding: 0 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 54px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    backdrop-filter: blur(10px);
+  }
+  .topbar-logo {
+    font-family: 'Righteous', cursive;
+    font-size: 26px;
+    color: var(--accent2);
+    text-decoration: none;
+    letter-spacing: 3px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topbar-logo span { color: var(--yellow2); }
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--pink2);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--pink);
+    animation: logopulse 2s infinite;
+    display: inline-block;
+    margin-left: 2px;
+  }
+  @keyframes logopulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(0.7)} }
+
+  .topbar-nav {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+  }
+  .topbar-nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: color 0.2s;
+  }
+  .topbar-nav a:hover { color: var(--text-bright); }
+  .nav-signup {
+    background: linear-gradient(135deg, var(--accent), var(--pink));
+    color: #fff !important;
+    padding: 7px 16px;
+    border-radius: 3px;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    transition: opacity 0.2s !important;
+  }
+  .nav-signup:hover { opacity: 0.85; color: #fff !important; }
+
+  /* ===================== HERO ===================== */
+  .hero {
+    padding: 80px 40px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent 0, transparent 80px, rgba(74,127,212,0.03) 80px, rgba(74,127,212,0.03) 81px),
+      repeating-linear-gradient(0deg, transparent 0, transparent 80px, rgba(74,127,212,0.03) 80px, rgba(74,127,212,0.03) 81px);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    font-family: 'VT323', monospace;
+    font-size: 16px;
+    color: var(--accent2);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+  }
+  .hero-title {
+    font-family: 'Righteous', cursive;
+    font-size: clamp(52px, 9vw, 100px);
+    color: var(--text-bright);
+    letter-spacing: 4px;
+    line-height: 1;
+    margin-bottom: 10px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+  .hero-title span { color: var(--yellow2); }
+  .hero-title .pink { color: var(--pink2); }
+
+  .hero-sub {
+    font-family: 'VT323', monospace;
+    font-size: 22px;
+    color: var(--text-dim);
+    letter-spacing: 4px;
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.3s forwards;
+  }
+
+  .hero-tagline {
+    font-size: 15px;
+    color: var(--text);
+    max-width: 500px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.4s forwards;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 60px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.5s forwards;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--pink));
+    color: #fff;
+    padding: 12px 28px;
+    font-family: 'Righteous', cursive;
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(74,127,212,0.3);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(74,127,212,0.5); }
+  .btn-secondary {
+    background: var(--bg3);
+    color: var(--text);
+    padding: 12px 28px;
+    font-family: 'Righteous', cursive;
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 1px solid var(--border2);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* HERO STATS */
+  .hero-stats {
+    display: flex;
+    gap: 0;
+    justify-content: center;
+    border: 1px solid var(--border2);
+    width: fit-content;
+    margin: 0 auto;
+    border-radius: 6px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.6s forwards;
+  }
+  .hero-stat {
+    padding: 14px 32px;
+    border-right: 1px solid var(--border2);
+    text-align: center;
+    background: var(--bg2);
+  }
+  .hero-stat:last-child { border-right: none; }
+  .hero-stat-num {
+    font-family: 'Righteous', cursive;
+    font-size: 22px;
+    color: var(--yellow2);
+    display: block;
+    letter-spacing: 1px;
+  }
+  .hero-stat-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+  }
+
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+  /* ===================== SECTION: RISING ===================== */
+  .section {
+    padding: 60px 40px;
+  }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .section-title {
+    font-family: 'Righteous', cursive;
+    font-size: 24px;
+    color: var(--text-bright);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .section-badge {
+    background: linear-gradient(135deg, var(--pink), var(--accent));
+    color: #fff;
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    padding: 2px 10px;
+    letter-spacing: 2px;
+    border-radius: 2px;
+    animation: badgepulse 3s infinite;
+  }
+  @keyframes badgepulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border2), transparent);
+  }
+
+  /* ===================== PROFILE CARDS ===================== */
+  .profiles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .profile-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    display: block;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  .profile-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--border2);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  }
+
+  .card-top-bar {
+    height: 3px;
+    width: 100%;
+  }
+
+  .card-inner {
+    padding: 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+
+  .card-avatar {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    filter: contrast(1.05) saturate(0.75) brightness(0.88);
+    transition: filter 0.3s;
+  }
+  .profile-card:hover .card-avatar {
+    filter: contrast(1) saturate(0.9) brightness(1);
+  }
+
+  .card-info { flex: 1; min-width: 0; }
+  .card-name {
+    font-family: 'Righteous', cursive;
+    font-size: 16px;
+    color: var(--text-bright);
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .card-handle {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .card-bio {
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.6;
+    font-weight: 300;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    border-top: 1px solid var(--border);
+    padding: 10px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .card-song {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+  .card-song span { color: var(--yellow2); }
+  .card-friends {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .card-friends strong { color: var(--accent2); font-family: 'Righteous', cursive; font-size: 13px; font-weight: 400; }
+
+  .card-online-badge {
+    position: absolute;
+    top: 20px; right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+  }
+  .online-pip {
+    width: 6px; height: 6px; border-radius: 50%;
+    animation: pip 2.5s infinite;
+  }
+  @keyframes pip { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+  /* ===================== FEATURES STRIP ===================== */
+  .features-strip {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .feature-item {
+    padding: 20px 28px;
+    border-right: 1px solid var(--border);
+    position: relative;
+  }
+  .feature-item:last-child { border-right: none; }
+  .feature-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: block;
+  }
+  .feature-title {
+    font-family: 'Righteous', cursive;
+    font-size: 14px;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .feature-desc {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ===================== ONLINE NOW STRIP ===================== */
+  .online-strip {
+    background: var(--bg3);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    overflow: hidden;
+  }
+  .online-label {
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .online-label::before {
+    content: '';
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    margin-right: 8px;
+    animation: pip 1.5s infinite;
+  }
+  .online-avatars {
+    display: flex;
+    gap: 6px;
+  }
+  .online-avatar {
+    width: 32px; height: 32px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid var(--border2);
+    filter: contrast(1.05) saturate(0.6) brightness(0.8);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .online-avatar:hover { filter: contrast(1) saturate(0.85) brightness(1); transform: scale(1.2); border-color: var(--accent2); }
+
+  /* ===================== ACTIVITY FEED ===================== */
+  .activity-section {
+    padding: 60px 40px;
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 28px;
+  }
+
+  .activity-feed { }
+  .activity-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-avatar {
+    width: 36px; height: 36px;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid var(--border2);
+    filter: saturate(0.6) brightness(0.8);
+    flex-shrink: 0;
+  }
+  .activity-text {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+  .activity-text strong { color: var(--accent2); font-weight: 700; font-size: 12px; }
+  .activity-text em { color: var(--text); font-style: normal; }
+  .activity-time {
+    font-family: 'VT323', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  /* SIDEBAR */
+  .sidebar {}
+  .sidebar-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px;
+    margin-bottom: 16px;
+  }
+  .sidebar-title {
+    font-family: 'Righteous', cursive;
+    font-size: 12px;
+    color: var(--accent2);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .trending-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .trending-item:last-child { border-bottom: none; }
+  .trending-num {
+    font-family: 'Righteous', cursive;
+    font-size: 15px;
+    color: var(--text-dim);
+    width: 18px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .trending-tag { color: var(--accent2); flex: 1; }
+  .trending-count {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+
+  .mood-list-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .mood-list-item:last-child { border-bottom: none; }
+  .mood-avatar {
+    width: 24px; height: 24px;
+    object-fit: cover; border-radius: 2px;
+    border: 1px solid var(--border);
+    filter: saturate(0.5) brightness(0.8);
+  }
+  .mood-name { color: var(--text); font-weight: 600; font-size: 11px; min-width: 44px; }
+  .mood-text { color: var(--text-dim); font-style: italic; }
+
+  /* ===================== FOOTER ===================== */
+  .footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: center;
+  }
+  .footer-logo {
+    font-family: 'Righteous', cursive;
+    font-size: 28px;
+    color: var(--accent2);
+    letter-spacing: 3px;
+    margin-bottom: 8px;
+  }
+  .footer-logo span { color: var(--yellow2); }
+  .footer-tagline {
+    font-family: 'VT323', monospace;
+    font-size: 15px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+  }
+  .footer-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text); }
+  .footer-copy {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-top: 6px;
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ===================== CARD ACCENT COLORS ===================== */
+  .acc-blue { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .acc-pink { background: linear-gradient(90deg, var(--pink), var(--pink2)); }
+  .acc-red { background: linear-gradient(90deg, #8a3028, #c04040); }
+  .acc-green { background: linear-gradient(90deg, #2a7a5a, #3ab87a); }
+  .acc-gold { background: linear-gradient(90deg, var(--yellow), var(--yellow2)); }
+  .acc-purple { background: linear-gradient(90deg, #6a4fa8, #a89fd8); }
+  .acc-teal { background: linear-gradient(90deg, #2a4a8a, #4a6aaa); }
+  .acc-olive { background: linear-gradient(90deg, #6a7a4a, #a0b488); }
+
+  /* hover glow per accent */
+  .profile-card.glow-blue:hover { box-shadow: 0 12px 40px rgba(74,127,212,0.25); }
+  .profile-card.glow-pink:hover { box-shadow: 0 12px 40px rgba(192,64,160,0.25); }
+  .profile-card.glow-red:hover { box-shadow: 0 12px 40px rgba(192,57,43,0.25); }
+  .profile-card.glow-green:hover { box-shadow: 0 12px 40px rgba(58,90,138,0.2); }
+  .profile-card.glow-gold:hover { box-shadow: 0 12px 40px rgba(196,154,72,0.25); }
+  .profile-card.glow-purple:hover { box-shadow: 0 12px 40px rgba(168,159,216,0.2); }
+  .profile-card.glow-teal:hover { box-shadow: 0 12px 40px rgba(42,122,90,0.25); }
+  .profile-card.glow-olive:hover { box-shadow: 0 12px 40px rgba(184,160,104,0.2); }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2), transparent);
+    margin: 0 40px;
+  }
+</style>
+</head>
+<body>
+
+<!-- MARQUEE -->
+<div class="top-marquee">
+  <span class="top-marquee-inner">★ welcome to myPlace — connect. share. be. ★ new profiles going live ★ the internet's coziest corner ★ express yourself ★ find your people ★ welcome to myPlace — connect. share. be. ★ new profiles going live ★ the internet's coziest corner ★ &nbsp;&nbsp;&nbsp;</span>
+</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="hub.html">
+    <span>my</span>Place<span class="logo-dot"></span>
+  </a>
+  <nav class="topbar-nav">
+    <a href="#">browse</a>
+    <a href="#">music</a>
+    <a href="#">forum</a>
+    <a href="#">about</a>
+    <a href="#" class="nav-signup">sign up free</a>
+  </nav>
+</div>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="hero-eyebrow">// version 2.1 · now live</div>
+  <div class="hero-title"><span>my</span>Place<span class="pink">.</span></div>
+  <div class="hero-sub">// connect · share · be yourself</div>
+  <p class="hero-tagline">Your corner of the internet. Customise your profile, post your playlist, find your people. No algorithm. No ads. Just <em>you</em>.</p>
+  <div class="hero-btns">
+    <a href="#" class="btn-primary">Join myPlace</a>
+    <a href="#rising" class="btn-secondary">Browse Profiles</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <span class="hero-stat-num">12,847</span>
+      <span class="hero-stat-label">Members</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">8</span>
+      <span class="hero-stat-label">Online Now</span>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">∞</span>
+      <span class="hero-stat-label">Vibes</span>
+    </div>
+  </div>
+</section>
+
+<!-- ONLINE NOW STRIP -->
+<div class="online-strip">
+  <div class="online-label">online now</div>
+  <div class="online-avatars">
+    <img class="online-avatar" src="https://i.pinimg.com/736x/10/d8/fb/10d8fb3f91e952d219498695679bf2c8.jpg" alt="ethan" title="ethan_p">
+    <img class="online-avatar" src="https://i.pinimg.com/736x/16/92/83/169283d8099b4d5cf3722025926591b0.jpg" alt="ryan" title="ryan_m">
+    <img class="online-avatar" src="https://i.pinimg.com/736x/0d/ec/74/0dec741738e1c7b75da11dc9434427cf.jpg" alt="patrick" title="patrick_c">
+    <img class="online-avatar" src="https://i.pinimg.com/736x/0b/b4/27/0bb4276409fb777fb0a606a6a5373c59.jpg" alt="nova" title="nova_r">
+    <img class="online-avatar" src="https://i.pinimg.com/736x/0e/b6/24/0eb62427a1a9373f1eec228e0513d040.jpg" alt="micha" title="micha_h">
+    <img class="online-avatar" src="https://i.pinimg.com/736x/44/42/07/444207905b0cfe8f620196a22efc4b2b.jpg" alt="ellie" title="ellie_h">
+    <img class="online-avatar" src="https://i.pinimg.com/736x/0a/e1/11/0ae111dd3427f8b7ac191b20bd270e30.jpg" alt="cole" title="cole_avery">
+    <img class="online-avatar" src="https://i.pinimg.com/736x/0d/51/14/0d5114cb908cc0c615e8a028eccbdb74.jpg" alt="kenzie" title="kenz_hall">
+  </div>
+  <span style="font-family:'VT323',monospace;font-size:13px;color:var(--text-dim);letter-spacing:2px;margin-left:4px;">+ 12,839 lurkers</span>
+</div>
+
+<!-- ===================== FEATURES ===================== -->
+<div class="features-strip">
+  <div class="feature-item">
+    <span class="feature-icon">🎵</span>
+    <div class="feature-title">Your Soundtrack</div>
+    <p class="feature-desc">Pin your current obsession. Let everyone know what you're blasting at 2am.</p>
+  </div>
+  <div class="feature-item">
+    <span class="feature-icon">✦</span>
+    <div class="feature-title">Full Customisation</div>
+    <p class="feature-desc">Your profile, your rules. Change everything. Go wild. We won't stop you.</p>
+  </div>
+  <div class="feature-item">
+    <span class="feature-icon">👥</span>
+    <div class="feature-title">Top Friends</div>
+    <p class="feature-desc">Eight slots. Choose wisely. People will absolutely read into it.</p>
+  </div>
+  <div class="feature-item">
+    <span class="feature-icon">📝</span>
+    <div class="feature-title">Comment Wall</div>
+    <p class="feature-desc">Public, permanent, embarrassing. Just like real life. Go for it.</p>
+  </div>
+</div>
+
+<!-- ===================== RISING PROFILES ===================== -->
+<section class="section" id="rising">
+  <div class="section-header">
+    <div class="section-title">Rising Profiles</div>
+    <div class="section-badge">★ trending this week</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="profiles-grid">
+
+    <!-- Ethan -->
+    <a href="ethan.html" class="profile-card glow-blue">
+      <div class="card-top-bar acc-blue"></div>
+      <div class="card-online-badge">
+        <div class="online-pip" style="background:var(--accent2);box-shadow:0 0 6px var(--accent);"></div>
+        online
+      </div>
+      <div class="card-inner">
+        <img class="card-avatar" src="https://i.pinimg.com/736x/10/d8/fb/10d8fb3f91e952d219498695679bf2c8.jpg" alt="Ethan">
+        <div class="card-info">
+          <span class="card-name">Ethan Parker</span>
+          <span class="card-handle">@ ethan_p · he/him · 20</span>
+          <p class="card-bio">"just a normal guy with normal interests. nothing to see here. please stop looking."</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-song">♪ <span>Stacy's Mom</span> — Fountains of Wayne</div>
+        <div class="card-friends"><strong>97</strong> friends</div>
+      </div>
+    </a>
+
+    <!-- Ryan -->
+    <a href="ryan.html" class="profile-card glow-red">
+      <div class="card-top-bar acc-red"></div>
+      <div class="card-online-badge">
+        <div class="online-pip" style="background:#b5a642;box-shadow:0 0 6px #b5a642;"></div>
+        online
+      </div>
+      <div class="card-inner">
+        <img class="card-avatar" src="https://i.pinimg.com/736x/16/92/83/169283d8099b4d5cf3722025926591b0.jpg" alt="Ryan">
+        <div class="card-info">
+          <span class="card-name">Ryan Mercer</span>
+          <span class="card-handle">@ ryan_m · he/they · 21</span>
+          <p class="card-bio">here for nothing in particular. don't make it weird. gas station employee. band (sort of).</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-song">♪ <span>Smells Like Teen Spirit</span> — Nirvana</div>
+        <div class="card-friends"><strong>84</strong> friends</div>
+      </div>
+    </a>
+
+    <!-- Patrick -->
+    <a href="patrick.html" class="profile-card glow-red">
+      <div class="card-top-bar" style="background:linear-gradient(90deg,#c0392b,#e05a4a);"></div>
+      <div class="card-online-badge">
+        <div class="online-pip" style="background:#e05a4a;box-shadow:0 0 6px #c0392b;"></div>
+        on call
+      </div>
+      <div class="card-inner">
+        <img class="card-avatar" src="https://i.pinimg.com/736x/0d/ec/74/0dec741738e1c7b75da11dc9434427cf.jpg" alt="Patrick">
+        <div class="card-info">
+          <span class="card-name">Patrick Calison</span>
+          <span class="card-handle">@ patrick_c · he/him · 21</span>
+          <p class="card-bio">"I made a rule after. never again. I mean it." STAY — knuckles. mechanic. shows up.</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-song">♪ <span>Immortals</span> — Fall Out Boy</div>
+        <div class="card-friends"><strong>203</strong> friends</div>
+      </div>
+    </a>
+
+    <!-- Nova -->
+    <a href="nova.html" class="profile-card glow-teal">
+      <div class="card-top-bar acc-teal" style="background:linear-gradient(90deg,#2a7a5a,#3ab87a);"></div>
+      <div class="card-online-badge">
+        <div class="online-pip" style="background:#3ab87a;box-shadow:0 0 6px #2a7a5a;"></div>
+        night shift
+      </div>
+      <div class="card-inner">
+        <img class="card-avatar" src="https://i.pinimg.com/736x/0b/b4/27/0bb4276409fb777fb0a606a6a5373c59.jpg" alt="Nova">
+        <div class="card-info">
+          <span class="card-name">Nova Reyes</span>
+          <span class="card-handle">@ nova_r · they/she · 22</span>
+          <p class="card-bio">"don't ask about the scar. don't ask about the incident." warehouse. nights. controlled.</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-song">♪ <span>Radioactive</span> — Imagine Dragons (×400)</div>
+        <div class="card-friends"><strong>61</strong> friends</div>
+      </div>
+    </a>
+
+    <!-- Micha -->
+    <a href="micha.html" class="profile-card glow-purple">
+      <div class="card-top-bar acc-purple"></div>
+      <div class="card-online-badge">
+        <div class="online-pip" style="background:#a89fd8;box-shadow:0 0 6px #7a6fa8;"></div>
+        online
+      </div>
+      <div class="card-inner">
+        <img class="card-avatar" src="https://i.pinimg.com/736x/0e/b6/24/0eb62427a1a9373f1eec228e0513d040.jpg" alt="Micha">
+        <div class="card-info">
+          <span class="card-name">Micha Harper</span>
+          <span class="card-handle">@ micha_h · they/them · 23</span>
+          <p class="card-bio">"still watching from the same seat. still not introducing myself." record store. 5 secret playlists.</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-song">♪ <span>Andrew in Drag</span> — The Magnetic Fields</div>
+        <div class="card-friends"><strong>312</strong> friends</div>
+      </div>
+    </a>
+
+    <!-- Ellie -->
+    <a href="ellie.html" class="profile-card glow-olive">
+      <div class="card-top-bar acc-olive"></div>
+      <div class="card-online-badge">
+        <div class="online-pip" style="background:#a0b488;box-shadow:0 0 6px #7a8c6a;"></div>
+        nearby
+      </div>
+      <div class="card-inner">
+        <img class="card-avatar" src="https://i.pinimg.com/736x/44/42/07/444207905b0cfe8f620196a22efc4b2b.jpg" alt="Ellie">
+        <div class="card-info">
+          <span class="card-name">Elowen Hart</span>
+          <span class="card-handle">@ ellie_h · she/her · 23</span>
+          <p class="card-bio">herbal shop. old songs. pressed flowers. knows twelve versions of Scarborough Fair.</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-song">♪ <span>Scarborough Fair</span> — Traditional</div>
+        <div class="card-friends"><strong>148</strong> friends</div>
+      </div>
+    </a>
+
+    <!-- Cole -->
+    <a href="cole.html" class="profile-card glow-gold">
+      <div class="card-top-bar acc-gold"></div>
+      <div class="card-online-badge">
+        <div class="online-pip" style="background:#c49a48;box-shadow:0 0 6px #8a6a30;"></div>
+        post-shift
+      </div>
+      <div class="card-inner">
+        <img class="card-avatar" src="https://i.pinimg.com/736x/0a/e1/11/0ae111dd3427f8b7ac191b20bd270e30.jpg" alt="Cole">
+        <div class="card-info">
+          <span class="card-name">Colton "Cole" Avery</span>
+          <span class="card-handle">@ cole_avery · he/him · 24</span>
+          <p class="card-bio">"you can say what you want about where I'm from. I've heard it." mechanic. hometown. loyal.</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-song">♪ <span>Sweet Home Alabama</span> — Lynyrd Skynyrd</div>
+        <div class="card-friends"><strong>174</strong> friends</div>
+      </div>
+    </a>
+
+    <!-- Kenzie -->
+    <a href="kenzie.html" class="profile-card glow-pink">
+      <div class="card-top-bar acc-pink"></div>
+      <div class="card-online-badge">
+        <div class="online-pip" style="background:#e050b0;box-shadow:0 0 6px #c03090;"></div>
+        always online
+      </div>
+      <div class="card-inner">
+        <img class="card-avatar" src="https://i.pinimg.com/736x/0d/51/14/0d5114cb908cc0c615e8a028eccbdb74.jpg" alt="Kenzie">
+        <div class="card-info">
+          <span class="card-name">Kenzie "Kenz" Hall</span>
+          <span class="card-handle">@ kenz_hall · she/her · 20</span>
+          <p class="card-bio">"lol I flirt as a joke and then panic when it gets real." clothing store. chaos. pregame queen.</p>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="card-song">♪ <span>Dirty Mind</span> — 3OH!3</div>
+        <div class="card-friends"><strong>∞</strong> friends</div>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ===================== ACTIVITY + SIDEBAR ===================== -->
+<div class="activity-section">
+  <!-- FEED -->
+  <div>
+    <div class="section-header" style="margin-bottom:20px;">
+      <div class="section-title">Recent Activity</div>
+      <div class="section-line"></div>
+    </div>
+    <div class="activity-feed">
+
+      <div class="activity-item">
+        <img class="activity-avatar" src="https://i.pinimg.com/736x/0d/51/14/0d5114cb908cc0c615e8a028eccbdb74.jpg" alt="">
+        <div class="activity-text">
+          <strong>kenz_hall</strong> posted on <em>jade_m</em>'s wall: <em>"I had somewhere to be!!"</em>
+        </div>
+        <div class="activity-time">2 min ago</div>
+      </div>
+
+      <div class="activity-item">
+        <img class="activity-avatar" src="https://i.pinimg.com/736x/10/d8/fb/10d8fb3f91e952d219498695679bf2c8.jpg" alt="">
+        <div class="activity-text">
+          <strong>ethan_p</strong> updated his <em>currently listening</em> · Stacy's Mom — Fountains of Wayne (again)
+        </div>
+        <div class="activity-time">7 min ago</div>
+      </div>
+
+      <div class="activity-item">
+        <img class="activity-avatar" src="https://i.pinimg.com/736x/0b/b4/27/0bb4276409fb777fb0a606a6a5373c59.jpg" alt="">
+        <div class="activity-text">
+          <strong>nova_r</strong> added <em>Radioactive</em> to their queue for the 401st time this month
+        </div>
+        <div class="activity-time">14 min ago</div>
+      </div>
+
+      <div class="activity-item">
+        <img class="activity-avatar" src="https://i.pinimg.com/736x/0d/ec/74/0dec741738e1c7b75da11dc9434427cf.jpg" alt="">
+        <div class="activity-text">
+          <strong>patrick_c</strong> drove 45 minutes to check on <em>dom_v</em> after a 2-word text
+        </div>
+        <div class="activity-time">23 min ago</div>
+      </div>
+
+      <div class="activity-item">
+        <img class="activity-avatar" src="https://i.pinimg.com/736x/0e/b6/24/0eb62427a1a9373f1eec228e0513d040.jpg" alt="">
+        <div class="activity-text">
+          <strong>micha_h</strong> created a new private playlist: <em>"for andrew (version 5)"</em> — 0 songs, in progress, not shared
+        </div>
+        <div class="activity-time">31 min ago</div>
+      </div>
+
+      <div class="activity-item">
+        <img class="activity-avatar" src="https://i.pinimg.com/736x/44/42/07/444207905b0cfe8f620196a22efc4b2b.jpg" alt="">
+        <div class="activity-text">
+          <strong>ellie_h</strong> disappeared from a gathering without saying goodbye. again. she thought about it though.
+        </div>
+        <div class="activity-time">1 hr ago</div>
+      </div>
+
+      <div class="activity-item">
+        <img class="activity-avatar" src="https://i.pinimg.com/736x/16/92/83/169283d8099b4d5cf3722025926591b0.jpg" alt="">
+        <div class="activity-text">
+          <strong>ryan_m</strong> arrived 45 minutes late to his own shift and said <em>"yeah"</em> to his manager like it was a complete sentence
+        </div>
+        <div class="activity-time">2 hr ago</div>
+      </div>
+
+      <div class="activity-item">
+        <img class="activity-avatar" src="https://i.pinimg.com/736x/0a/e1/11/0ae111dd3427f8b7ac191b20bd270e30.jpg" alt="">
+        <div class="activity-text">
+          <strong>cole_avery</strong> did a full two-step near the cooler when Sweet Home Alabama came on. claims he was <em>"stretching."</em>
+        </div>
+        <div class="activity-time">3 hr ago</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">Trending Tags</div>
+      <div class="trending-item">
+        <div class="trending-num">1</div>
+        <div class="trending-tag">#StacysMom</div>
+        <div class="trending-count" style="color:var(--text-dim);">247 posts</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-num">2</div>
+        <div class="trending-tag">#NightShift</div>
+        <div class="trending-count" style="color:var(--text-dim);">188 posts</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-num">3</div>
+        <div class="trending-tag">#ForAndrew</div>
+        <div class="trending-count" style="color:var(--text-dim);">112 posts</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-num">4</div>
+        <div class="trending-tag">#SweetHomeAlabama</div>
+        <div class="trending-count" style="color:var(--text-dim);">98 posts</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-num">5</div>
+        <div class="trending-tag">#Radioactive</div>
+        <div class="trending-count" style="color:var(--text-dim);">83 posts</div>
+      </div>
+    </div>
+
+    <div class="sidebar-card">
+      <div class="sidebar-title">Current Moods</div>
+      <div class="mood-list-item">
+        <img class="mood-avatar" src="https://i.pinimg.com/736x/10/d8/fb/10d8fb3f91e952d219498695679bf2c8.jpg" alt="">
+        <div class="mood-name">ethan_p</div>
+        <div class="mood-text">fine. totally fine.</div>
+      </div>
+      <div class="mood-list-item">
+        <img class="mood-avatar" src="https://i.pinimg.com/736x/16/92/83/169283d8099b4d5cf3722025926591b0.jpg" alt="">
+        <div class="mood-name">ryan_m</div>
+        <div class="mood-text">bored. angry. fine.</div>
+      </div>
+      <div class="mood-list-item">
+        <img class="mood-avatar" src="https://i.pinimg.com/736x/0d/ec/74/0dec741738e1c7b75da11dc9434427cf.jpg" alt="">
+        <div class="mood-name">patrick_c</div>
+        <div class="mood-text">you good? no really?</div>
+      </div>
+      <div class="mood-list-item">
+        <img class="mood-avatar" src="https://i.pinimg.com/736x/0b/b4/27/0bb4276409fb777fb0a606a6a5373c59.jpg" alt="">
+        <div class="mood-name">nova_r</div>
+        <div class="mood-text">controlled. mostly.</div>
+      </div>
+      <div class="mood-list-item">
+        <img class="mood-avatar" src="https://i.pinimg.com/736x/0e/b6/24/0eb62427a1a9373f1eec228e0513d040.jpg" alt="">
+        <div class="mood-name">micha_h</div>
+        <div class="mood-text">thinking too loud.</div>
+      </div>
+      <div class="mood-list-item">
+        <img class="mood-avatar" src="https://i.pinimg.com/736x/44/42/07/444207905b0cfe8f620196a22efc4b2b.jpg" alt="">
+        <div class="mood-name">ellie_h</div>
+        <div class="mood-text">present, distantly so.</div>
+      </div>
+      <div class="mood-list-item">
+        <img class="mood-avatar" src="https://i.pinimg.com/736x/0a/e1/11/0ae111dd3427f8b7ac191b20bd270e30.jpg" alt="">
+        <div class="mood-name">cole_avery</div>
+        <div class="mood-text">good. long day but good.</div>
+      </div>
+      <div class="mood-list-item">
+        <img class="mood-avatar" src="https://i.pinimg.com/736x/0d/51/14/0d5114cb908cc0c615e8a028eccbdb74.jpg" alt="">
+        <div class="mood-name">kenz_hall</div>
+        <div class="mood-text">chaotic. thriving.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="footer">
+  <div>
+    <div class="footer-logo"><span>my</span>Place</div>
+    <div class="footer-tagline">// your corner of the internet · since forever</div>
+    <div class="footer-copy">© myPlace · all rights reserved · probably</div>
+  </div>
+  <div>
+    <div class="footer-links">
+      <a href="#">about</a>
+      <a href="#">faq</a>
+      <a href="#">privacy</a>
+      <a href="#">contact</a>
+      <a href="#">blog</a>
+      <a href="#">forum</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
