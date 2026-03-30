@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ellie_hart // myPlace</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0c0a;
+    --bg2: #131210;
+    --bg3: #191714;
+    --border: #2e2a24;
+    --border2: #3a3530;
+    --accent: #7a8c6a;
+    --accent2: #a0b488;
+    --text: #c8c0a8;
+    --text-dim: #5a5448;
+    --text-bright: #e4dcc8;
+    --gold: #b8a068;
+    --sage: #6a7a5a;
+    --mist: #8a9488;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'EB Garamond', serif;
+    font-weight: 400;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 15% 40%, rgba(122,140,106,0.04) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 70%, rgba(184,160,104,0.03) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='300' height='300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+  .topbar-logo {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    color: var(--accent2);
+    text-decoration: none;
+    letter-spacing: 4px;
+  }
+  .topbar-logo span { color: var(--text-dim); }
+  .topbar-nav { display: flex; gap: 20px; align-items: center; }
+  .topbar-nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+    transition: color 0.2s;
+  }
+  .topbar-nav a:hover { color: var(--accent2); }
+  .hub-link {
+    background: var(--sage);
+    color: var(--text-bright) !important;
+    padding: 5px 12px;
+    font-size: 10px !important;
+    border: 1px solid var(--accent2);
+  }
+
+  /* PROFILE HEADER */
+  .profile-header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 32px 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .profile-header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 28px,
+      rgba(255,255,255,0.006) 28px, rgba(255,255,255,0.006) 29px
+    );
+    pointer-events: none;
+  }
+  .profile-header::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--gold), var(--accent), transparent);
+    opacity: 0.5;
+  }
+
+  .profile-main-row {
+    display: flex;
+    gap: 28px;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar-wrap { position: relative; flex-shrink: 0; }
+  .avatar-border {
+    position: absolute; inset: -5px;
+    border: 1px solid var(--border2);
+    pointer-events: none;
+  }
+  .avatar-border::before, .avatar-border::after {
+    content: '✦';
+    position: absolute;
+    font-size: 10px;
+    color: var(--gold);
+    opacity: 0.6;
+  }
+  .avatar-border::before { top: -6px; left: 50%; transform: translateX(-50%); }
+  .avatar-border::after { bottom: -6px; left: 50%; transform: translateX(-50%); }
+
+  .profile-avatar {
+    width: 120px; height: 120px;
+    object-fit: cover;
+    display: block;
+    filter: sepia(0.25) brightness(0.88) contrast(1.05);
+    border: 1px solid var(--border);
+    transition: filter 0.4s;
+  }
+  .profile-avatar:hover { filter: sepia(0.1) brightness(1) contrast(1); }
+
+  .profile-identity { flex: 1; padding-bottom: 18px; }
+  .id-flourish {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Cinzel', serif;
+    margin-bottom: 6px;
+  }
+  .profile-display-name {
+    font-family: 'Cinzel', serif;
+    font-size: 26px;
+    color: var(--text-bright);
+    font-weight: 600;
+    letter-spacing: 3px;
+    line-height: 1;
+  }
+  .profile-handle {
+    color: var(--accent2);
+    font-size: 13px;
+    margin-top: 5px;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 1px;
+  }
+  .profile-tagline {
+    font-family: 'EB Garamond', serif;
+    font-size: 14px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    font-style: italic;
+    max-width: 440px;
+    line-height: 1.6;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 0;
+    margin-top: 16px;
+    border: 1px solid var(--border);
+    width: fit-content;
+  }
+  .stat-item {
+    padding: 8px 20px;
+    border-right: 1px solid var(--border);
+    text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    color: var(--gold);
+    display: block;
+  }
+  .stat-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'Cinzel', serif;
+  }
+
+  .song-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 8px 14px;
+    margin-top: 14px;
+    width: fit-content;
+    margin-bottom: -1px;
+  }
+  .song-badge-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; font-family: 'Cinzel', serif; }
+  .song-badge-title { font-size: 13px; color: var(--accent2); font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 15px; }
+  .song-note { font-size: 15px; color: var(--gold); animation: hum 3s ease-in-out infinite alternate; }
+  @keyframes hum { from{opacity:0.6} to{opacity:1} }
+
+  /* ONLINE DOT */
+  .profile-online {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--text-dim); font-size: 11px; margin-top: 10px;
+    font-family: 'Cinzel', serif; letter-spacing: 1px;
+  }
+  .online-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent2); box-shadow: 0 0 5px var(--accent);
+    animation: breathe 3s ease-in-out infinite;
+  }
+  @keyframes breathe { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* TABS */
+  .tabs-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    position: sticky;
+    top: 44px;
+    z-index: 90;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 1px solid transparent;
+    color: var(--text-dim);
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 14px 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+
+  /* CONTENT */
+  .page-content { display: none; padding: 32px 40px; }
+  .page-content.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
+
+  .two-col { display: grid; grid-template-columns: 260px 1fr; gap: 22px; }
+
+  /* CARD */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    padding: 18px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border2), transparent);
+  }
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    color: var(--gold);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* ABOUT FIELDS */
+  .about-field { margin-bottom: 11px; }
+  .about-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    font-family: 'Cinzel', serif;
+    margin-bottom: 2px;
+  }
+  .about-value {
+    font-size: 13px;
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+  .about-value.soft { color: var(--accent2); }
+
+  /* BLURB */
+  .blurb-text {
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--text);
+    font-family: 'EB Garamond', serif;
+    white-space: pre-line;
+    font-style: italic;
+  }
+  .blurb-text em { color: var(--accent2); font-style: normal; }
+  .blurb-text strong { color: var(--gold); font-weight: 400; }
+
+  /* MOOD */
+  .mood-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+  }
+  .mood-bar em { color: var(--text); }
+
+  /* FRIENDS */
+  .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .friend-item { text-align: center; cursor: pointer; }
+  .friend-item img {
+    width: 70px; height: 70px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    filter: sepia(0.3) brightness(0.8);
+    display: block; margin: 0 auto 4px;
+    transition: all 0.3s;
+  }
+  .friend-item:hover img { filter: sepia(0) brightness(1); border-color: var(--accent); }
+  .friend-name { font-size: 9px; color: var(--text-dim); font-family: 'Cinzel', serif; letter-spacing: 1px; }
+
+  .friend-avatar-placeholder {
+    width: 70px; height: 70px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    color: var(--accent);
+    transition: all 0.2s;
+  }
+  .friend-item:hover .friend-avatar-placeholder { border-color: var(--accent2); color: var(--gold); }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .contact-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 9px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'Cinzel', serif;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+  .contact-btn:hover { border-color: var(--accent); color: var(--accent2); }
+
+  /* TAGS */
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    cursor: default;
+    transition: all 0.2s;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--text); }
+
+  /* PHOTOS */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 6px;
+  }
+  .photo-item {
+    aspect-ratio: 1; overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer; position: relative;
+  }
+  .photo-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: sepia(0.2) brightness(0.82) contrast(1.05);
+    transition: all 0.4s;
+  }
+  .photo-item:hover img { filter: sepia(0.05) brightness(1) contrast(1); transform: scale(1.04); }
+  .photo-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(13,12,10,0.5) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  /* COMMENTS */
+  .post-item { border-bottom: 1px solid var(--border); padding: 16px 0; }
+  .post-item:last-child { border-bottom: none; }
+  .post-meta { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .post-author { font-family: 'Cinzel', serif; font-size: 12px; color: var(--gold); letter-spacing: 1px; }
+  .post-date { font-size: 10px; color: var(--text-dim); font-family: 'Cormorant Garamond', serif; font-style: italic; }
+  .post-body { font-size: 14px; line-height: 1.7; color: var(--text); font-family: 'EB Garamond', serif; }
+  .post-body em { color: var(--accent2); font-style: italic; }
+
+  /* PLAYLIST */
+  .playlist-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    font-family: 'Cormorant Garamond', serif; font-size: 14px;
+  }
+  .playlist-num { color: var(--text-dim); width: 20px; text-align: right; font-family: 'Cinzel', serif; font-size: 10px; }
+  .playlist-song { color: var(--text); font-style: italic; }
+  .playlist-artist { color: var(--text-dim); font-size: 12px; }
+  .playlist-info { flex: 1; }
+  .playlist-note { font-size: 10px; color: var(--sage); font-style: italic; }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.94); z-index: 999;
+    align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lightbox-close {
+    position: absolute; top: 20px; right: 28px;
+    font-size: 18px; color: var(--text-dim); cursor: pointer;
+    font-family: 'Cinzel', serif; letter-spacing: 3px;
+  }
+  .lightbox-close:hover { color: var(--text-bright); }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="#"><span>MY</span>PLACE</a>
+  <nav class="topbar-nav">
+    <a href="#">home</a>
+    <a href="#">search</a>
+    <a href="#">music</a>
+    <a href="hub.html" class="hub-link">◂ hub</a>
+  </nav>
+</div>
+
+<!-- PROFILE HEADER -->
+<div class="profile-header">
+  <div class="profile-main-row">
+    <div class="avatar-wrap">
+      <div class="avatar-border"></div>
+      <img class="profile-avatar" src="https://i.pinimg.com/736x/44/42/07/444207905b0cfe8f620196a22efc4b2b.jpg" alt="Elowen Hart">
+    </div>
+    <div class="profile-identity">
+      <div class="id-flourish">✦ &nbsp; profile &nbsp; · &nbsp; ellie_h &nbsp; ✦</div>
+      <div class="profile-display-name">Elowen Hart</div>
+      <div class="profile-handle">@ ellie_h &nbsp;·&nbsp; 23 &nbsp;·&nbsp; she/her</div>
+      <div class="profile-tagline">"are you going to Scarborough Fair? parsley, sage, rosemary, and thyme."</div>
+      <div class="stat-row">
+        <div class="stat-item"><span class="stat-num">148</span><span class="stat-label">friends</span></div>
+        <div class="stat-item"><span class="stat-num">12</span><span class="stat-label">versions</span></div>
+        <div class="stat-item"><span class="stat-num">∞</span><span class="stat-label">pressed flowers</span></div>
+        <div class="stat-item"><span class="stat-num">1</span><span class="stat-label">unanswered</span></div>
+      </div>
+      <div class="profile-online"><div class="online-dot"></div>somewhere nearby, probably</div>
+      <div class="song-badge">
+        <span class="song-note">♪</span>
+        <div>
+          <div class="song-badge-label">// humming</div>
+          <div class="song-badge-title">Scarborough Fair — Traditional (her favourite version)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('profile', this)">Profile</button>
+  <button class="tab-btn" onclick="showTab('photos', this)">Photos</button>
+  <button class="tab-btn" onclick="showTab('music', this)">Music</button>
+  <button class="tab-btn" onclick="showTab('comments', this)">Comments</button>
+</div>
+
+<!-- ===================== PROFILE TAB ===================== -->
+<div id="tab-profile" class="page-content active">
+  <div class="two-col">
+    <!-- LEFT -->
+    <div>
+      <div class="mood-bar">mood: <em>&nbsp;present, but distantly so.</em></div>
+
+      <div class="card">
+        <div class="card-title">✦ About</div>
+        <div class="about-field"><div class="about-label">age</div><div class="about-value">23</div></div>
+        <div class="about-field"><div class="about-label">location</div><div class="about-value">the herbal shop. the library. the garden.</div></div>
+        <div class="about-field"><div class="about-label">ethnicity</div><div class="about-value">English & Welsh</div></div>
+        <div class="about-field"><div class="about-label">status</div><div class="about-value soft">somewhere between here and gone.</div></div>
+        <div class="about-field"><div class="about-label">eyes</div><div class="about-value">soft green, grey in dim light</div></div>
+        <div class="about-field"><div class="about-label">height</div><div class="about-value">5'5"</div></div>
+        <div class="about-field"><div class="about-label">job</div><div class="about-value">herbal shop / bookstore. sings sometimes.</div></div>
+        <div class="about-field"><div class="about-label">record</div><div class="about-value">none</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">✦ Contact</div>
+        <div class="contact-grid">
+          <div class="contact-btn">✉ message</div>
+          <div class="contact-btn">+ add</div>
+          <div class="contact-btn">♡ favourite</div>
+          <div class="contact-btn">⚑ report</div>
+        </div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:12px; color:var(--text-dim); margin-top:10px; font-style:italic; letter-spacing:0.5px;">
+          she may not answer immediately. she will think about it for a long time.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">✦ Top Network</div>
+        <div class="friends-grid">
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">✦</div>
+            <div class="friend-name">gran</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">✦</div>
+            <div class="friend-name">wren</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">✦</div>
+            <div class="friend-name">the plants</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">✦</div>
+            <div class="friend-name">[private]</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">✦</div>
+            <div class="friend-name">clover</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">✦</div>
+            <div class="friend-name">[gone]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <div class="card">
+        <div class="card-title">✦ About Me</div>
+        <div class="blurb-text">My grandmother taught me the old songs before she taught me how to read. I think that was the right order.
+
+I work at a small herbal shop. I know the names of things people have forgotten. I talk to the plants when no one is watching, and sometimes when someone is.
+
+People tend to lower their voices around me. I don't do anything to cause this. It simply happens.
+
+I left someone once without explaining why. I've thought about it often since. I think I was waiting for them to already know, and that was unfair, and I know that now.
+
+I collect pressed flowers inside old books. The flowers flatten into something eternal that way. I like the thought of that — that beautiful things can be preserved by being held inside something with words.
+
+I make terrible tea and drink it anyway. <em>It feels right.</em> That matters more than most people think.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">✦ Who I'd Like To Meet</div>
+        <div class="blurb-text">someone patient enough to wait for me to finish a sentence I've started three times.
+
+someone who doesn't need the mystery solved — only appreciated.
+
+someone who has also stood in a garden at dusk and felt the particular sadness of almost-dark.
+
+<em>someone I haven't already let slip away without meaning to.</em></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">✦ Interests</div>
+        <div class="tag-cloud">
+          <div class="tag">scarborough fair (all 12 versions)</div>
+          <div class="tag">old songs</div>
+          <div class="tag">pressed flowers</div>
+          <div class="tag">herbs</div>
+          <div class="tag">folk music</div>
+          <div class="tag">talking to plants</div>
+          <div class="tag">terrible tea</div>
+          <div class="tag">old books</div>
+          <div class="tag">braids</div>
+          <div class="tag">gardens at dusk</div>
+          <div class="tag">disappearing quietly</div>
+          <div class="tag">returning like nothing happened</div>
+          <div class="tag">longing without urgency</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">✦ General</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:14px; line-height:2.1; color:var(--text-dim); font-style:italic;">
+          <span style="color:var(--text);">Hair:</span> ash brown. long. loose braids or just loose.<br>
+          <span style="color:var(--text);">Scars:</span> small one on her palm. birthmark on shoulder — like a pressed flower.<br>
+          <span style="color:var(--text);">Presence:</span> still. rarely sudden movements.<br>
+          <span style="color:var(--text);">Smell:</span> faintly like herbs and old paper.<br>
+          <span style="color:var(--text);">Tic:</span> twists a ring when thinking. hums without realising.<br>
+          <span style="color:var(--text);">Disability:</span> chronic fatigue. she pushes through quietly.<br>
+          <span style="color:var(--text);">Skeletons:</span> she left someone. she tests people by expecting them to understand things she never says.<br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHOTOS TAB ===================== -->
+<div id="tab-photos" class="page-content">
+  <div class="card">
+    <div class="card-title">✦ Image Archive</div>
+    <div style="font-size:11px; color:var(--text-dim); margin-bottom:14px; font-family:'Cormorant Garamond',serif; font-style:italic; letter-spacing:0.5px;">20 photographs · most slightly out of time, like the person in them.</div>
+    <div class="photo-grid" id="photoGrid"></div>
+  </div>
+</div>
+
+<!-- ===================== MUSIC TAB ===================== -->
+<div id="tab-music" class="page-content">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-title">✦ Current Rotation</div>
+        <div class="playlist-item"><div class="playlist-num">i</div><div class="playlist-info"><div class="playlist-song">Scarborough Fair</div><div class="playlist-artist">Traditional (her favourite version — she won't say which)</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">ii</div><div class="playlist-info"><div class="playlist-song">Scarborough Fair</div><div class="playlist-artist">Simon & Garfunkel</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">iii</div><div class="playlist-info"><div class="playlist-song">Scarborough Fair</div><div class="playlist-artist">Hayley Westenra</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">iv</div><div class="playlist-info"><div class="playlist-song">The Water Is Wide</div><div class="playlist-artist">Traditional</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">v</div><div class="playlist-info"><div class="playlist-song">Blackbird</div><div class="playlist-artist">Traditional (various)</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">vi</div><div class="playlist-info"><div class="playlist-song">Wild Mountain Thyme</div><div class="playlist-artist">Traditional</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">vii</div><div class="playlist-info"><div class="playlist-song">She Moved Through the Fair</div><div class="playlist-artist">Traditional</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">viii</div><div class="playlist-info"><div class="playlist-song">The Parting Glass</div><div class="playlist-artist">Traditional</div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">✦ Favourite Artists</div>
+        <div class="tag-cloud">
+          <div class="tag">Sandy Denny</div>
+          <div class="tag">Fairport Convention</div>
+          <div class="tag">Pentangle</div>
+          <div class="tag">Nick Drake</div>
+          <div class="tag">June Tabor</div>
+          <div class="tag">Shirley Collins</div>
+          <div class="tag">John Renbourn</div>
+          <div class="tag">Steeleye Span</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">✦ A Note on Scarborough Fair</div>
+        <div class="blurb-text" style="font-size:13px; color:var(--text-dim);">
+She knows twelve versions.
+She has a favourite she won't explain.
+<em>She says the task in the song is meant to be impossible. That's the point. You're not meant to come back.</em>
+She has never elaborated on this.
+Nobody has pushed her to.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== COMMENTS TAB ===================== -->
+<div id="tab-comments" class="page-content">
+  <div style="max-width:680px;">
+    <div class="card">
+      <div class="card-title">✦ Comments (6)</div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">wren_f</div><div class="post-date">2 days ago</div></div>
+        <div class="post-body">you disappeared from the gathering last night without saying goodbye again. I turned around and you were just — gone. are you alright?</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ellie_h</div><div class="post-date">2 days ago</div></div>
+        <div class="post-body"><em>I'm quite alright. I needed the air. I meant to say goodbye — I did think about saying it.</em></div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">clover_m</div><div class="post-date">4 days ago</div></div>
+        <div class="post-body">the tea you made at the shop today tasted like actual grass. like dirt and grass. why do you keep making it like that</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ellie_h</div><div class="post-date">4 days ago</div></div>
+        <div class="post-body">It's the blend. It's meant to taste like that. <em>It's grounding.</em></div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">clover_m</div><div class="post-date">4 days ago</div></div>
+        <div class="post-body">ellie it tasted like a garden path</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">anon_visitor</div><div class="post-date">last week</div></div>
+        <div class="post-body">I came into the shop to ask about something for sleep and you handed me three things and explained each one very quietly and I felt immediately calmer. I don't know how you did that. Thank you.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ellie_h</div><div class="post-date">last week</div></div>
+        <div class="post-body"><em>I'm glad. Sleep well.</em></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-close">close ✦</div>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const photos = [
+    "https://i.pinimg.com/736x/44/42/07/444207905b0cfe8f620196a22efc4b2b.jpg",
+    "https://i.pinimg.com/736x/49/2a/dd/492addd5efe9406d8bc12198f078684f.jpg",
+    "https://i.pinimg.com/736x/52/b7/df/52b7df66938b94d8f6d2a0f3e9037ca7.jpg",
+    "https://i.pinimg.com/736x/59/1b/3f/591b3f863e2ed28314fd0df8b331f58e.jpg",
+    "https://i.pinimg.com/736x/5a/33/82/5a33821ebc78a55c6daa064de73a202f.jpg",
+    "https://i.pinimg.com/736x/60/ce/22/60ce22d9cf541d04ee3148f960f7345b.jpg",
+    "https://i.pinimg.com/736x/60/d5/43/60d5430994b62e8c9e082bd6990ce755.jpg",
+    "https://i.pinimg.com/736x/63/fe/c5/63fec5c10c00708d12b0c4e8f357954d.jpg",
+    "https://i.pinimg.com/736x/6d/09/3f/6d093f7cb151cd035a120cd09c481c8a.jpg",
+    "https://i.pinimg.com/736x/78/e0/39/78e0399cd4d66563d2b88fc146b51a38.jpg",
+    "https://i.pinimg.com/736x/ac/57/dd/ac57dd086f540ee7c00ae1a9c4575df7.jpg",
+    "https://i.pinimg.com/736x/d2/3a/61/d23a61500bd61f383f1a2cab54588e61.jpg",
+    "https://i.pinimg.com/736x/dd/a4/3d/dda43d5f5fdc4937a305215da11c5bf8.jpg",
+    "https://i.pinimg.com/736x/eb/c3/d4/ebc3d44150498fea85f0468f0acc0225.jpg",
+    "https://i.pinimg.com/736x/ec/0c/4a/ec0c4a486488e07292a3b60917667f7d.jpg",
+    "https://i.pinimg.com/736x/f4/ff/ae/f4ffae6ab82694c7d0516cbce0598396.jpg",
+    "https://i.pinimg.com/736x/f6/dd/15/f6dd1541a699b69127f041dbff2883c3.jpg",
+    "https://i.pinimg.com/736x/f7/5a/23/f75a23cc2d15f56779069177e4f97ead.jpg",
+    "https://i.pinimg.com/736x/f8/bb/87/f8bb873324c57599488ca5c644447857.jpg",
+    "https://i.pinimg.com/736x/fc/41/f6/fc41f6e83ca5f604e0e33b8936fe1ffc.jpg"
+  ];
+
+  const grid = document.getElementById('photoGrid');
+  photos.forEach(src => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    const img = document.createElement('img');
+    img.src = src; img.alt = '';
+    img.onclick = () => openLightbox(src);
+    div.appendChild(img);
+    grid.appendChild(div);
+  });
+
+  function showTab(name, btn) {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+</script>
+</body>
+</html>
