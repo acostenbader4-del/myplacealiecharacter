@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ethan_p // myPlace</title>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f1a;
+    --bg2: #13152a;
+    --bg3: #1a1d38;
+    --border: #252845;
+    --border2: #333660;
+    --accent: #4a7fd4;
+    --accent2: #6a9fe4;
+    --accent3: #e05a30;
+    --text: #b8c4e0;
+    --text-dim: #505878;
+    --text-bright: #dce4f8;
+    --yellow: #d4b840;
+    --yellow2: #e8d060;
+    --pink: #c05080;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 70% 20%, rgba(74,127,212,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 20% 80%, rgba(212,184,64,0.04) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg width='4' height='4' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='1' height='1' fill='rgba(255,255,255,0.012)'/%3E%3C/svg%3E");
+    background-size: auto, auto, 4px 4px;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 2px solid var(--border2);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+  .topbar-logo {
+    font-family: 'Righteous', cursive;
+    font-size: 20px;
+    color: var(--accent2);
+    text-decoration: none;
+    letter-spacing: 2px;
+  }
+  .topbar-logo span { color: var(--yellow2); }
+  .topbar-nav { display: flex; gap: 20px; align-items: center; }
+  .topbar-nav a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .topbar-nav a:hover { color: var(--text-bright); }
+  .hub-link {
+    background: var(--accent);
+    color: #fff !important;
+    padding: 5px 12px;
+    font-size: 11px !important;
+    border-radius: 3px;
+  }
+
+  /* MARQUEE */
+  .marquee-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 5px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-inner {
+    display: inline-block;
+    animation: marquee 22s linear infinite;
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    color: var(--accent2);
+    letter-spacing: 2px;
+  }
+  @keyframes marquee { from{transform:translateX(100vw)} to{transform:translateX(-100%)} }
+
+  /* PROFILE HEADER */
+  .profile-header {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-deco {
+    position: absolute;
+    top: 0; right: 0;
+    width: 300px; height: 100%;
+    background: radial-gradient(ellipse at right, rgba(74,127,212,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  /* tiny star field */
+  .header-deco::before {
+    content: '★ ☆ ★ ☆ ★ ☆ ★';
+    position: absolute;
+    top: 12px; right: 20px;
+    font-size: 10px;
+    color: rgba(106,159,228,0.2);
+    letter-spacing: 4px;
+  }
+
+  .profile-main-row {
+    display: flex;
+    gap: 24px;
+    align-items: flex-end;
+    position: relative;
+    z-index: 1;
+  }
+
+  .avatar-wrap { position: relative; flex-shrink: 0; }
+  .profile-avatar {
+    width: 120px; height: 120px;
+    object-fit: cover;
+    display: block;
+    border: 2px solid var(--border2);
+    border-radius: 4px;
+    filter: contrast(1.05) brightness(0.9) saturate(0.8);
+    transition: filter 0.3s;
+  }
+  .profile-avatar:hover { filter: contrast(1) brightness(1.05) saturate(1); }
+  .avatar-badge {
+    position: absolute;
+    bottom: -10px; right: -10px;
+    background: var(--yellow);
+    color: var(--bg);
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    padding: 2px 7px;
+    letter-spacing: 1px;
+    transform: rotate(3deg);
+  }
+
+  .profile-identity { flex: 1; padding-bottom: 18px; }
+  .id-tag {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+  .profile-display-name {
+    font-family: 'Righteous', cursive;
+    font-size: 32px;
+    color: var(--text-bright);
+    letter-spacing: 2px;
+    line-height: 1;
+  }
+  .profile-handle {
+    color: var(--accent2);
+    font-size: 12px;
+    margin-top: 5px;
+    font-family: 'VT323', monospace;
+    letter-spacing: 2px;
+  }
+  .profile-tagline {
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    font-style: italic;
+    max-width: 440px;
+    line-height: 1.5;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 0;
+    margin-top: 16px;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    overflow: hidden;
+    width: fit-content;
+  }
+  .stat-item {
+    padding: 8px 18px;
+    border-right: 1px solid var(--border2);
+    text-align: center;
+    background: var(--bg3);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Righteous', cursive;
+    font-size: 17px;
+    color: var(--yellow2);
+    display: block;
+    letter-spacing: 1px;
+  }
+  .stat-label {
+    font-size: 9px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+  }
+
+  .profile-online {
+    display: flex; align-items: center; gap: 6px;
+    color: var(--text-dim); font-size: 11px; margin-top: 10px;
+    font-family: 'VT323', monospace; letter-spacing: 2px;
+  }
+  .online-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent2); box-shadow: 0 0 7px var(--accent);
+    animation: pulse 2.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .song-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-left: 4px solid var(--yellow);
+    padding: 8px 14px;
+    margin-top: 14px;
+    width: fit-content;
+    margin-bottom: -1px;
+    border-radius: 0 4px 0 0;
+  }
+  .song-badge-label { font-size: 9px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; font-family: 'VT323', monospace; font-size: 12px; }
+  .song-badge-title { font-size: 13px; color: var(--yellow2); font-family: 'Righteous', cursive; letter-spacing: 1px; }
+  .song-note { font-size: 18px; color: var(--yellow2); animation: wiggle 1s ease-in-out infinite alternate; }
+  @keyframes wiggle { from{transform:rotate(-8deg)} to{transform:rotate(8deg)} }
+
+  /* TABS */
+  .tabs-bar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    position: sticky;
+    top: 44px;
+    z-index: 90;
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: var(--text-dim);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 13px 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent2); border-bottom-color: var(--accent2); }
+
+  /* CONTENT */
+  .page-content { display: none; padding: 28px 40px; }
+  .page-content.active { display: block; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+
+  .two-col { display: grid; grid-template-columns: 255px 1fr; gap: 20px; }
+
+  /* CARD */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 18px;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+    opacity: 0.5;
+  }
+  .card-title {
+    font-family: 'Righteous', cursive;
+    font-size: 14px;
+    color: var(--accent2);
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* ABOUT */
+  .about-field { margin-bottom: 10px; display: flex; gap: 8px; align-items: baseline; }
+  .about-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-dim);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    white-space: nowrap;
+    min-width: 72px;
+  }
+  .about-value {
+    font-size: 13px;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+  }
+  .about-value.blue { color: var(--accent2); }
+  .about-value.yellow { color: var(--yellow2); }
+  .about-value.red { color: var(--accent3); }
+
+  /* BLURB */
+  .blurb-text {
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 300;
+    white-space: pre-line;
+  }
+  .blurb-text em { color: var(--accent2); font-style: normal; font-weight: 600; }
+  .blurb-text strong { color: var(--yellow2); font-weight: 400; }
+  .blurb-text s { color: var(--text-dim); }
+
+  /* MOOD */
+  .mood-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--yellow);
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-family: 'VT323', monospace;
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+  .mood-bar em { color: var(--text); font-style: normal; }
+
+  /* CRINGE METER */
+  .cringe-meter {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin-bottom: 16px;
+  }
+  .cringe-label {
+    font-family: 'VT323', monospace;
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .cringe-bar-bg {
+    background: var(--bg);
+    border: 1px solid var(--border2);
+    border-radius: 2px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .cringe-bar-fill {
+    height: 100%;
+    width: 82%;
+    background: linear-gradient(90deg, var(--accent), var(--pink));
+    border-radius: 2px;
+  }
+  .cringe-note {
+    font-family: 'Nunito', sans-serif;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 5px;
+    font-style: italic;
+    text-align: right;
+  }
+
+  /* FRIENDS */
+  .friends-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .friend-item { text-align: center; cursor: pointer; }
+  .friend-item img {
+    width: 70px; height: 70px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    filter: contrast(1.05) saturate(0.7) brightness(0.85);
+    display: block; margin: 0 auto 4px;
+    transition: all 0.2s;
+  }
+  .friend-item:hover img { filter: contrast(1) saturate(0.9) brightness(1); border-color: var(--accent2); }
+  .friend-name { font-size: 9px; color: var(--text-dim); font-family: 'VT323', monospace; letter-spacing: 1px; font-size: 12px; }
+
+  .friend-avatar-placeholder {
+    width: 70px; height: 70px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 4px;
+    font-family: 'Righteous', cursive;
+    font-size: 18px;
+    color: var(--accent);
+    transition: all 0.2s;
+  }
+  .friend-item:hover .friend-avatar-placeholder { border-color: var(--accent2); color: var(--yellow2); }
+
+  /* CONTACT */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .contact-btn {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 9px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 10px;
+    color: var(--text-dim);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .contact-btn:hover { border-color: var(--accent2); color: var(--accent2); }
+
+  /* TAGS */
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 3px 9px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    cursor: default;
+    transition: all 0.2s;
+  }
+  .tag:hover { border-color: var(--accent2); color: var(--text); }
+
+  /* PHOTOS */
+  .photo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 6px;
+  }
+  .photo-item {
+    aspect-ratio: 1; overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer; position: relative;
+  }
+  .photo-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: contrast(1.05) saturate(0.75) brightness(0.85);
+    transition: all 0.3s;
+  }
+  .photo-item:hover img { filter: contrast(1) saturate(0.95) brightness(1.05); transform: scale(1.04); }
+
+  /* COMMENTS */
+  .post-item { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .post-item:last-child { border-bottom: none; }
+  .post-meta { display: flex; justify-content: space-between; margin-bottom: 8px; }
+  .post-author { font-family: 'Righteous', cursive; font-size: 14px; color: var(--accent2); letter-spacing: 1px; }
+  .post-date { font-size: 10px; color: var(--text-dim); font-family: 'VT323', monospace; letter-spacing: 1px; font-size: 13px; }
+  .post-body { font-size: 13px; line-height: 1.7; color: var(--text); font-family: 'Nunito', sans-serif; }
+  .post-body em { color: var(--yellow2); font-style: italic; }
+
+  /* PLAYLIST */
+  .playlist-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    font-family: 'Nunito', sans-serif; font-size: 13px;
+  }
+  .playlist-num { color: var(--text-dim); width: 20px; text-align: right; font-family: 'VT323', monospace; font-size: 14px; }
+  .playlist-song { color: var(--text); }
+  .playlist-artist { color: var(--text-dim); font-size: 11px; }
+  .playlist-info { flex: 1; }
+  .playlist-note { font-size: 10px; color: var(--yellow2); font-style: italic; }
+
+  /* LIGHTBOX */
+  .lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.95); z-index: 999;
+    align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 4px; }
+  .lightbox-close {
+    position: absolute; top: 20px; right: 28px;
+    font-family: 'Righteous', cursive;
+    font-size: 18px; color: var(--text-dim); cursor: pointer;
+    letter-spacing: 2px;
+  }
+  .lightbox-close:hover { color: var(--text-bright); }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="#"><span>my</span>Place</a>
+  <nav class="topbar-nav">
+    <a href="#">home</a>
+    <a href="#">search</a>
+    <a href="#">music</a>
+    <a href="hub.html" class="hub-link">◂ hub</a>
+  </nav>
+</div>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <span class="marquee-inner">★ welcome to ethan's page ★ please do not read into anything here ★ this is a normal profile ★ everything is totally fine ★ do not look too closely ★ welcome to ethan's page ★ please do not read into anything here ★ this is a normal profile ★ everything is totally fine ★ &nbsp;&nbsp;&nbsp;</span>
+</div>
+
+<!-- PROFILE HEADER -->
+<div class="profile-header">
+  <div class="header-deco"></div>
+  <div class="profile-main-row">
+    <div class="avatar-wrap">
+      <img class="profile-avatar" src="https://i.pinimg.com/736x/10/d8/fb/10d8fb3f91e952d219498695679bf2c8.jpg" alt="Ethan Parker">
+      <div class="avatar-badge">20 ★</div>
+    </div>
+    <div class="profile-identity">
+      <div class="id-tag">// ethan_p · he/him · 20</div>
+      <div class="profile-display-name">Ethan Parker</div>
+      <div class="profile-handle">@ ethan_p &nbsp;·&nbsp; he/him &nbsp;·&nbsp; last online: right now, anxiously</div>
+      <div class="profile-tagline">"just a normal guy with normal interests. nothing to see here. please stop looking."</div>
+      <div class="stat-row">
+        <div class="stat-item"><span class="stat-num">97</span><span class="stat-label">friends</span></div>
+        <div class="stat-item"><span class="stat-num">???</span><span class="stat-label">cool points</span></div>
+        <div class="stat-item"><span class="stat-num">∞</span><span class="stat-label">overthinks</span></div>
+        <div class="stat-item"><span class="stat-num">0</span><span class="stat-label">chill</span></div>
+      </div>
+      <div class="profile-online"><div class="online-dot"></div>online (probably sweating a little)</div>
+      <div class="song-badge">
+        <span class="song-note">♪</span>
+        <div>
+          <div class="song-badge-label">// totally normal listening to</div>
+          <div class="song-badge-title">Stacy's Mom — Fountains of Wayne</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="showTab('profile', this)">Profile</button>
+  <button class="tab-btn" onclick="showTab('photos', this)">Photos</button>
+  <button class="tab-btn" onclick="showTab('music', this)">Music</button>
+  <button class="tab-btn" onclick="showTab('comments', this)">Comments</button>
+</div>
+
+<!-- ===================== PROFILE TAB ===================== -->
+<div id="tab-profile" class="page-content active">
+  <div class="two-col">
+    <!-- LEFT -->
+    <div>
+      <div class="mood-bar">mood: <em>&nbsp;fine. totally fine. why.</em></div>
+
+      <div class="cringe-meter">
+        <div class="cringe-label">// SELF-AWARENESS LEVEL</div>
+        <div class="cringe-bar-bg"><div class="cringe-bar-fill"></div></div>
+        <div class="cringe-note">high enough to know. not high enough to stop.</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">About</div>
+        <div class="about-field"><div class="about-label">age</div><div class="about-value">20</div></div>
+        <div class="about-field"><div class="about-label">location</div><div class="about-value">suburbs. the normal ones.</div></div>
+        <div class="about-field"><div class="about-label">ethnicity</div><div class="about-value">White (suburban American)</div></div>
+        <div class="about-field"><div class="about-label">status</div><div class="about-value blue">it's... a whole thing.</div></div>
+        <div class="about-field"><div class="about-label">eyes</div><div class="about-value">blue</div></div>
+        <div class="about-field"><div class="about-label">height</div><div class="about-value">5'8" (still growing into it)</div></div>
+        <div class="about-field"><div class="about-label">job</div><div class="about-value">grocery store / fast food. whatever.</div></div>
+        <div class="about-field"><div class="about-label">subtlety</div><div class="about-value red">none. absolutely none.</div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Contact</div>
+        <div class="contact-grid">
+          <div class="contact-btn">✉ message</div>
+          <div class="contact-btn">+ add</div>
+          <div class="contact-btn">☆ favourite</div>
+          <div class="contact-btn">⚑ report</div>
+        </div>
+        <div style="font-family:'Nunito',sans-serif; font-size:11px; color:var(--text-dim); margin-top:10px; font-style:italic;">
+          will reply immediately and then spend an hour rereading what he sent.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Top Friends</div>
+        <div class="friends-grid">
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">stacy</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">jake</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">marcus</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">dev</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">nobody</div>
+          </div>
+          <div class="friend-item">
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">ask</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div>
+      <div class="card">
+        <div class="card-title">About Me</div>
+        <div class="blurb-text">I'm a pretty normal guy. I like music, hanging out, the usual stuff.
+
+I've been going over to my friend Stacy's house a lot lately. Just to hang out. It's close. It's convenient. <s>That's the reason.</s>
+
+I'm told I stare sometimes. I don't mean to. I'm just thinking.
+
+I tried to bring up the topic of "older women" in conversation once — casually, as a hypothetical, as a normal thing to bring up — and the look I got from Jake means I will never attempt that again.
+
+I practice being cool. <em>In the mirror.</em> It doesn't translate in real life, which is something I'm working on.
+
+I am more subtle than people give me credit for.
+
+<s>I am not subtle at all.</s></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Who I'd Like To Meet</div>
+        <div class="blurb-text">someone mature. experienced. interesting.
+
+<s>someone who can drive.</s>
+
+okay I'm not going to explain this.
+
+someone who makes me feel like I'm not completely behind everyone else.
+
+<em>(not going to answer follow-up questions about this.)</em></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Interests</div>
+        <div class="tag-cloud">
+          <div class="tag">skateboarding (mostly falling)</div>
+          <div class="tag">music</div>
+          <div class="tag">stacy's mom (the song)</div>
+          <div class="tag">hanging out at stacy's</div>
+          <div class="tag">graphic tees</div>
+          <div class="tag">same sneakers every day</div>
+          <div class="tag">looking cool (attempting)</div>
+          <div class="tag">overthinking everything</div>
+          <div class="tag">acting casual</div>
+          <div class="tag">early 2000s stuff</div>
+          <div class="tag">being seen as mature</div>
+          <div class="tag">cargo shorts</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">General</div>
+        <div style="font-family:'Nunito',sans-serif; font-size:13px; line-height:2.1; color:var(--text-dim);">
+          <span style="color:var(--text);">Hair:</span> sandy blonde. slightly shaggy. kind of growing into itself.<br>
+          <span style="color:var(--text);">Scars:</span> knee scar from skateboarding. some acne scars he's sensitive about.<br>
+          <span style="color:var(--text);">Tic:</span> stares too long without realising. laughs at wrong moments.<br>
+          <span style="color:var(--text);">Sweat:</span> yes, when anxious. which is often.<br>
+          <span style="color:var(--text);">Subtlety:</span> self-assessed HIGH. actual: LOW.<br>
+          <span style="color:var(--text);">Mirror practice:</span> yes. daily. does not help.<br>
+          <span style="color:var(--text);">Criminal record:</span> none. too anxious.<br>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== PHOTOS TAB ===================== -->
+<div id="tab-photos" class="page-content">
+  <div class="card">
+    <div class="card-title">Photos — ethan_p</div>
+    <div style="font-size:11px; color:var(--text-dim); margin-bottom:14px; font-family:'Nunito',sans-serif; font-style:italic;">20 photos · most taken by someone else · he's making a weird face in several of them</div>
+    <div class="photo-grid" id="photoGrid"></div>
+  </div>
+</div>
+
+<!-- ===================== MUSIC TAB ===================== -->
+<div id="tab-music" class="page-content">
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <div class="card-title">Currently Playing</div>
+        <div class="playlist-item"><div class="playlist-num">1</div><div class="playlist-info"><div class="playlist-song">Stacy's Mom</div><div class="playlist-artist">Fountains of Wayne</div></div><div class="playlist-note">alone in his room. volume up.</div></div>
+        <div class="playlist-item"><div class="playlist-num">2</div><div class="playlist-info"><div class="playlist-song">Stacy's Mom</div><div class="playlist-artist">Fountains of Wayne</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">3</div><div class="playlist-info"><div class="playlist-song">Sk8er Boi</div><div class="playlist-artist">Avril Lavigne</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">4</div><div class="playlist-info"><div class="playlist-song">All the Small Things</div><div class="playlist-artist">blink-182</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">5</div><div class="playlist-info"><div class="playlist-song">Dammit</div><div class="playlist-artist">blink-182</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">6</div><div class="playlist-info"><div class="playlist-song">The Middle</div><div class="playlist-artist">Jimmy Eat World</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">7</div><div class="playlist-info"><div class="playlist-song">Complicated</div><div class="playlist-artist">Avril Lavigne</div></div></div>
+        <div class="playlist-item"><div class="playlist-num">8</div><div class="playlist-info"><div class="playlist-song">Sugar We're Goin Down</div><div class="playlist-artist">Fall Out Boy</div></div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">Favourite Artists</div>
+        <div class="tag-cloud">
+          <div class="tag">Fountains of Wayne</div>
+          <div class="tag">blink-182</div>
+          <div class="tag">Avril Lavigne</div>
+          <div class="tag">Jimmy Eat World</div>
+          <div class="tag">Fall Out Boy</div>
+          <div class="tag">Sum 41</div>
+          <div class="tag">Good Charlotte</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">A Note on Stacy's Mom</div>
+        <div class="blurb-text" style="font-size:13px; color:var(--text-dim);">
+He has blasted this song alone in his room like it is his <em>personal biography.</em>
+He knows every word.
+He has never once acknowledged this out loud.
+He has mouthed along to it in the car with the window down.
+He will deny all of this.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== COMMENTS TAB ===================== -->
+<div id="tab-comments" class="page-content">
+  <div style="max-width:680px;">
+    <div class="card">
+      <div class="card-title">Comments (10)</div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">jake_r</div><div class="post-date">yesterday</div></div>
+        <div class="post-body">dude you have been over at stacy's house FOUR TIMES this week. you don't even text stacy to go, you just show up</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ethan_p</div><div class="post-date">yesterday</div></div>
+        <div class="post-body">she has a good TV.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">jake_r</div><div class="post-date">yesterday</div></div>
+        <div class="post-body">ethan.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ethan_p</div><div class="post-date">yesterday</div></div>
+        <div class="post-body">I don't know what you want me to say.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">marcus_d</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body">you accidentally called her "really cool for someone her a—" and then just stopped talking mid-sentence and stared at the floor for like 10 seconds</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ethan_p</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body"><em>I was losing my train of thought.</em></div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">marcus_d</div><div class="post-date">3 days ago</div></div>
+        <div class="post-body">you were SWEATING</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">dev_k</div><div class="post-date">last week</div></div>
+        <div class="post-body">hey can I borrow your skateboard</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">ethan_p</div><div class="post-date">last week</div></div>
+        <div class="post-body">yeah. just don't scratch it up more than it already is.</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-meta"><div class="post-author">mom_parker</div><div class="post-date">2 weeks ago</div></div>
+        <div class="post-body">Ethan you left your shoes in the hallway again. Also Stacy's mother called to say thank you for helping with the groceries?? You didn't mention that</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-close">close ✕</div>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  const photos = [
+    "https://i.pinimg.com/736x/10/d8/fb/10d8fb3f91e952d219498695679bf2c8.jpg",
+    "https://i.pinimg.com/736x/2a/6b/65/2a6b653656ed42c980c9b64451089835.jpg",
+    "https://i.pinimg.com/736x/31/cb/3e/31cb3e3279243ffa007f4a1d2219b5b9.jpg",
+    "https://i.pinimg.com/736x/4d/43/93/4d43936b82db9a730e514efbdbc45dc4.jpg",
+    "https://i.pinimg.com/736x/56/d9/2b/56d92b18ee1a2c7060b8feda66280b44.jpg",
+    "https://i.pinimg.com/736x/79/f2/c2/79f2c294aec97b01c8a9bb2db697c1bd.jpg",
+    "https://i.pinimg.com/736x/7a/be/d5/7abed55646c2eb7f60003fb1753d7cf1.jpg",
+    "https://i.pinimg.com/736x/7c/d0/d5/7cd0d5c4c4d4bca94db8c1848d315319.jpg",
+    "https://i.pinimg.com/736x/80/48/1c/80481c70df72ff8bcb761ccd7760acd9.jpg",
+    "https://i.pinimg.com/736x/83/4d/2b/834d2b2ec3ac913afef48b5f14d79676.jpg",
+    "https://i.pinimg.com/736x/a1/d7/6c/a1d76cacc51470ba70323e4e7c0e7444.jpg",
+    "https://i.pinimg.com/736x/ae/82/1b/ae821b7b22e3a152c8251fea602baa58.jpg",
+    "https://i.pinimg.com/736x/b6/5d/61/b65d612966d85b2d90451e147eec4414.jpg",
+    "https://i.pinimg.com/736x/d2/c0/3d/d2c03d1555eae35fe75d098bbbef1a8f.jpg",
+    "https://i.pinimg.com/736x/da/eb/35/daeb3500f9d67018757a9163cdfdd430.jpg",
+    "https://i.pinimg.com/736x/de/63/df/de63dffae499f20485c216575d88c20b.jpg",
+    "https://i.pinimg.com/736x/de/cb/90/decb906b67387c23826692b65ba49283.jpg",
+    "https://i.pinimg.com/736x/e8/91/63/e89163137bd0a9ed4c7b479ec32336da.jpg",
+    "https://i.pinimg.com/736x/ea/17/58/ea175895f183d7f24865e86a938a8c40.jpg",
+    "https://i.pinimg.com/736x/ec/fc/30/ecfc30a3e070d600fb38552ddf4f592a.jpg"
+  ];
+
+  const grid = document.getElementById('photoGrid');
+  photos.forEach(src => {
+    const div = document.createElement('div');
+    div.className = 'photo-item';
+    const img = document.createElement('img');
+    img.src = src; img.alt = '';
+    img.onclick = () => openLightbox(src);
+    div.appendChild(img);
+    grid.appendChild(div);
+  });
+
+  function showTab(name, btn) {
+    document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+</script>
+</body>
+</html>
