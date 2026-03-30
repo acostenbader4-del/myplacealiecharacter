@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>nova_reyes // MySpace</title>
+<title>nova_reyes // myPlace</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -533,13 +533,30 @@
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--border2); }
   ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  .friend-avatar-placeholder {
+    width: 70px; height: 70px;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 4px;
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    color: var(--accent);
+    clip-path: polygon(4px 0%, 100% 0%, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0% 100%, 0% 4px);
+    transition: all 0.2s;
+  }
+  .friend-item:hover .friend-avatar-placeholder {
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
 </style>
 </head>
 <body>
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <a class="topbar-logo" href="#"><span>MY</span>SPACE</a>
+  <a class="topbar-logo" href="#"><span>MY</span>PLACE</a>
   <nav class="topbar-nav">
     <a href="#">home</a>
     <a href="#">search</a>
@@ -594,7 +611,6 @@
 <div class="tabs-bar">
   <button class="tab-btn active" onclick="showTab('profile', this)">Profile</button>
   <button class="tab-btn" onclick="showTab('photos', this)">Photos</button>
-  <button class="tab-btn" onclick="showTab('blog', this)">Blog</button>
   <button class="tab-btn" onclick="showTab('music', this)">Music</button>
   <button class="tab-btn" onclick="showTab('comments', this)">Comments</button>
 </div>
@@ -642,28 +658,34 @@
         <div class="card-title">// Top Network</div>
         <div class="friends-grid">
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/3a/86/7e/3a867ec940e40300a2d3e7447e75b7c8.jpg" alt="">
-            <div class="friend-name">sable</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">sable
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/4b/4e/cd/4b4ecd0875b37e59ce5a11dd9ae482b6.jpg" alt="">
-            <div class="friend-name">ro</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">ro
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/6a/be/cb/6abecbfe43f1c0a323d492628d17682d.jpg" alt="">
-            <div class="friend-name">[private]</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">[private]
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/7a/3f/27/7a3f278fabb927b7d989ed2db8c2d421.jpg" alt="">
-            <div class="friend-name">cass (sibling)</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">cass (sibling)
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/b6/1f/9d/b61f9deeecab74f8511c8d6dc9e349d0.jpg" alt="">
-            <div class="friend-name">[private]</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">[private]
+          </div>
           </div>
           <div class="friend-item">
-            <img src="https://i.pinimg.com/736x/d4/c2/0a/d4c20a058b22c252252a4d6b6dd299ee.jpg" alt="">
-            <div class="friend-name">[private]</div>
+            <div class="friend-avatar-placeholder">?</div>
+            <div class="friend-name">[private]
+          </div>
           </div>
         </div>
       </div>
@@ -745,73 +767,7 @@ someone my sibling would like. that's a real bar I have.
   </div>
 </div>
 
-<!-- ===================== BLOG TAB ===================== -->
-<div id="tab-blog" class="page-content">
-  <div style="max-width:700px;">
-
-    <div class="blog-entry">
-      <div class="blog-title">// ON STRAY ANIMALS</div>
-      <div class="blog-meta">posted: 4 days ago &nbsp;·&nbsp; views: 9</div>
-      <div class="blog-body">found another one behind the warehouse last week. orange tabby, half-starved, mean as hell until I sat down on the ground next to it and didn't move for a while.
-
-it let me feed it eventually.
-
-people keep asking why I bother. like it's strange to feed something that can't say thank you.
-
-<em>I don't need the thank you. I just need to know it ate something.</em>
-
-I'm keeping this one. don't tell anyone.</div>
-    </div>
-
-    <div class="blog-entry">
-      <div class="blog-title">// ON THE INCIDENT (partial)</div>
-      <div class="blog-meta">posted: 3 weeks ago &nbsp;·&nbsp; views: 4</div>
-      <div class="blog-body">people ask sometimes. I don't answer.
-
-not because I'm protecting a secret. more because <span class="redacted">I was there and I made a call and I'd probably make the same one and I don't know what that says about me.</span>
-
-what I will say:
-
-I disappeared for a while after. came back different. not worse — different. I was afraid for a long time that the change was permanent in a way I couldn't undo.
-
-now I think the change is just <em>me</em>.
-
-I don't know if that's better or worse. It's just true.
-
-<span class="redacted">sometimes I miss it. the clarity. everything was very simple when I was just trying to survive.</span></div>
-    </div>
-
-    <div class="blog-entry">
-      <div class="blog-title">// CASS</div>
-      <div class="blog-meta">posted: last month &nbsp;·&nbsp; views: 2</div>
-      <div class="blog-body">my sibling called today to tell me about a grade they got. good one. didn't have to call me but they did.
-
-I'm not going to say what I felt about that. It's private.
-
-I will say: the whole reason I do what I do — the night shifts, the careful decisions, the staying far enough away that nothing I'm involved in touches them — is so they never have to know what I know.
-
-<em>they deserve a life that's just... easy. clean. theirs.</em>
-
-I'm working on making sure of it.</div>
-    </div>
-
-    <div class="blog-entry">
-      <div class="blog-title">// 3AM / can't sleep again</div>
-      <div class="blog-meta">posted: last month &nbsp;·&nbsp; views: 1</div>
-      <div class="blog-body">the song is on again. 
-I'm not going to say which one. <span class="redacted">radioactive. again. 3rd time tonight.</span>
-
-there's something about it. I woke up in a new age — that part. the kingdom come, that's calling me. 
-
-I don't know. it just feels accurate. like something I would have written if I could write things.
-
-I should sleep. I have a 6am.
-
-I'm not going to sleep.</div>
-    </div>
-
-  </div>
-</div>
+ 
 
 <!-- ===================== MUSIC TAB ===================== -->
 <div id="tab-music" class="page-content">
